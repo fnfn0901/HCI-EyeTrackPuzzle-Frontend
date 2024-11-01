@@ -57,5 +57,21 @@
     font-weight: 400;
     line-height: 22px;
     letter-spacing: 3px;
-    text-align: right;
+}
+
+.puzzle-container {
+    display: grid;
+    grid-template-columns: repeat(4, 150px);
+    gap: 20px;
+    position: absolute;
+    justify-content: center;
+    left: 50%;
+    top: 200px;
+    transform: translateX(-50%);
+}
+
+.puzzle-piece {
+    width: 150px;
+    height: 150px;
+    background-color: #D9D9D9;
 }

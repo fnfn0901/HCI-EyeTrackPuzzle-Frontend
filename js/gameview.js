@@ -91,6 +91,11 @@ function updateStopwatch() {
     }
 }
 
+// 성공/실패 처리 함수
+function handleResult(result) {
+    window.location.href = `result.html?result=${result}`;
+}
+
 window.onload = () => {
     const overlay = document.getElementById('overlay');
     const alertBox = document.getElementById('alert-box');

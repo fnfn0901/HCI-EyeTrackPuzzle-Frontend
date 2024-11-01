@@ -11,7 +11,7 @@ function goBack() {
 function togglePause() {
     const overlay = document.getElementById('overlay');
     const alertBox = document.getElementById('alert-box');
-    
+
     // 타이머가 실행 중일 때만 경고창을 표시
     if (running) {
         stopStopwatch(); // 타이머 정지
@@ -59,5 +59,9 @@ function updateStopwatch() {
 }
 
 window.onload = () => {
+    const overlay = document.getElementById('overlay');
+    const alertBox = document.getElementById('alert-box');
+    overlay.style.display = 'none';
+    alertBox.style.display = 'none';
     startStopwatch(); // 페이지 로드 시 타이머 시작
 };

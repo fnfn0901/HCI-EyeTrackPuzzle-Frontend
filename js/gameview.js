@@ -5,7 +5,35 @@ let running = false; // 초기 상태는 정지
 let timerId;
 
 function goBack() {
-    window.history.back();
+    const overlay = document.getElementById('overlay');
+    const alertBox = document.getElementById('alert-box');
+    const alertTitle = document.querySelector('.alert-title');
+    const continueButton = document.querySelector('.continue-button');
+    const menuButton = document.querySelector('.menu-button');
+
+    // 타이머 멈춤
+    stopStopwatch();
+
+    // 경고창 텍스트와 버튼 기능 변경
+    alertTitle.textContent = '게임을 종료하시겠습니까?';
+    continueButton.textContent = '게임 종료';
+    menuButton.textContent = '취소';
+
+    // 게임 종료 버튼 클릭 시 index.html로 이동
+    continueButton.onclick = () => {
+        window.location.href = 'index.html';
+    };
+
+    // 취소 버튼 클릭 시 게임을 이어서 진행
+    menuButton.onclick = () => {
+        overlay.style.display = 'none';
+        alertBox.style.display = 'none';
+        continueGame(); // 기존 continueGame 함수 호출하여 게임 이어서 진행
+    };
+
+    // 경고창 표시
+    overlay.style.display = 'block';
+    alertBox.style.display = 'flex';
 }
 
 function togglePause() {

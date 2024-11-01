@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "Helvetica Neue";
+    src: url("../fonts/HelveticaNeueRegular.otf") format("opentype");
+}
+
 body {
     margin: 0;
     height: 100vh; 

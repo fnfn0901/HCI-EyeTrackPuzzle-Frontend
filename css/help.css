@@ -1,0 +1,45 @@
+@font-face {
+    font-family: "Helvetica Neue Bold";
+    src: url("../fonts/HelveticaNeueBold.otf") format("opentype");
+}
+
+.help-container {
+    position: relative;
+}
+
+.back-button {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    height: 24px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.help-title {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #333;
+    text-align: center;
+    font-family: "Helvetica Neue Bold", sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 22px;
+    letter-spacing: -0.41px;
+}
+
+.help-description {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #333;
+    text-align: center;
+    font-family: "Helvetica Neue Bold", sans-serif;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: -0.408px;
+}

@@ -25,11 +25,16 @@ function continueGame() {
     const alertBox = document.getElementById('alert-box');
     overlay.style.display = 'none'; // 어두운 배경 숨김
     alertBox.style.display = 'none'; // 경고창 숨김
-    startStopwatch(); // 타이머 재개
+
+    // 일시정지 시점의 경과 시간에 따라 startTime 재설정
+    startTime = new Date().getTime() - difference;
+    running = true;
+    timerId = setInterval(updateStopwatch, 100); // 타이머 재개
 }
 
 function goToMenu() {
-    // 메인 메뉴로 이동하는 로직을 구현할 수 있습니다.
+    // index.html로 이동
+    window.location.href = 'index.html';
 }
 
 function startStopwatch() {

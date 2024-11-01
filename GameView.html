@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/gameview.css"> <!-- GameView 전용 CSS 파일 -->
+    <script src="js/gameview.js" defer></script> <!-- GameView 전용 JS 파일 -->
+    <link rel="preload" href="fonts/HelveticaNeueBold.otf" as="font" type="font/otf" crossorigin="anonymous"> <!-- 폰트 로드 -->
+    <title>Game View</title>
+</head>
+<body>
+    <div class="game-container">
+        <img src="images/Back.svg" alt="Back" class="back-button" onclick="goBack()"> <!-- Back.svg 사용 -->
+        <img src="images/Pause.svg" alt="Pause" class="pause-button" onclick="togglePause()"> <!-- Pause.svg 사용 -->
+    </div>
+</body>
+</html>

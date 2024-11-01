@@ -5,11 +5,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // "Play Game" 버튼 클릭 시 GameView로 이동
     playButton.addEventListener("click", function() {
-        window.location.href = "GameView.html"; // GameView.html 파일로 이동
+        window.location.href = "gameview.html"; // GameView.html 파일로 이동
     });
 
     // "Help" 버튼 클릭 시 Help 페이지로 이동
     helpButton.addEventListener("click", function() {
-        window.location.href = "Help.html"; // Help.html 파일로 이동
+        window.location.href = "help.html"; // Help.html 파일로 이동
     });
 });

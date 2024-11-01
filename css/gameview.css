@@ -1,0 +1,26 @@
+@font-face {
+    font-family: "Helvetica Neue";
+    src: url("../fonts/HelveticaNeueRegular.otf") format("opentype");
+}
+
+.game-container {
+    position: relative;
+}
+
+.back-button {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    height: 24px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.pause-button {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    height: 24px;
+    flex-shrink: 0;
+    cursor: pointer;
+}

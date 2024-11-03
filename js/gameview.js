@@ -92,8 +92,11 @@ function updateStopwatch() {
 }
 
 // 성공/실패 처리 함수
+// 성공/실패 처리 함수
 function handleResult(result) {
-    window.location.href = `result.html?result=${result}`;
+    const levelText = document.querySelector('.level-text').textContent;
+    const timerText = document.querySelector('.timer-text').textContent;
+    window.location.href = `result.html?result=${result}&level=${encodeURIComponent(levelText)}&time=${encodeURIComponent(timerText)}`;
 }
 
 window.onload = () => {

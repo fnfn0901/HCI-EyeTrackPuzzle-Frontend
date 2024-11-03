@@ -23,4 +23,18 @@ window.onload = () => {
         resultMessage.textContent = 'Game Over';
         resultMessage.style.color = '#FF8181'; // 실패 시 색상 변경
     }
+
+    // 버튼 클릭 이벤트 설정
+    document.getElementById('retryButton').onclick = () => {
+        window.location.href = 'gameview.html';
+    };
+    document.getElementById('nextGameButton').onclick = () => {
+        window.location.href = 'gameview.html';
+    };
+    document.getElementById('chooseLevelButton').onclick = () => {
+        window.location.href = 'index.html';
+    };
+    document.getElementById('mainMenuButton').onclick = () => {
+        window.location.href = 'index.html';
+    };
 };

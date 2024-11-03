@@ -4,29 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/result.css">
+    <script src="js/result.js" defer></script>
     <title>결과 화면</title>
 </head>
 <body>
     <div class="result-container">
-        <div class="result-message" id="resultMessage"></div>
-        <button onclick="goToMenu()">메인 메뉴로 돌아가기</button>
+        <div class="result-message" id="resultMessage">Game Result</div>
+        <div class="result-level" id="resultLevel">레벨</div>
+        <div class="result-timer" id="resultTimer">00:00</div>
+        <button class="result-button" id="retryButton">Retry</button>
+        <button class="result-button" id="nextGameButton">Next Game</button>
+        <button class="result-button" id="chooseLevelButton">Choose Level</button>
+        <button class="result-button" id="mainMenuButton" onclick="goToMenu()">Main Menu</button>
     </div>
-    <script>
-        function goToMenu() {
-            window.location.href = 'index.html';
-        }
-
-        // URL 파라미터에서 결과 가져오기
-        window.onload = () => {
-            const params = new URLSearchParams(window.location.search);
-            const result = params.get('result');
-            const resultMessage = document.getElementById('resultMessage');
-            if (result === 'success') {
-                resultMessage.textContent = '축하합니다! 성공하셨습니다.';
-            } else if (result === 'failure') {
-                resultMessage.textContent = '아쉽게도 실패하셨습니다.';
-            }
-        };
-    </script>
 </body>
 </html>

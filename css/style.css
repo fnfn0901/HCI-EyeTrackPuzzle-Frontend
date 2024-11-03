@@ -57,3 +57,7 @@ body {
 .help-button {
     background: #4A90E2; 
 }
+
+.game-button:hover, .help-button:hover {
+    background-color: #357ABD;
+}

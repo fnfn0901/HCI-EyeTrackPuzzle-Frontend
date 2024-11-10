@@ -124,6 +124,11 @@ function initializeGame() {
     // 클릭 이벤트 등록
     gridItems.forEach(item => {
         item.addEventListener('click', () => {
+            // back-button 또는 pause-button은 동작하지 않음
+            if (item.classList.contains('back-button') || item.classList.contains('pause-button')) {
+                return;
+            }
+
             if (selectedPiece) {
                 if (!item.getAttribute('data-image')) {
                     // 빈 슬롯에 퍼즐 옮기기

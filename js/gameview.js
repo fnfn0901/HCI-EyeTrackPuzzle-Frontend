@@ -125,13 +125,25 @@ function initializeGame() {
     gridItems.forEach(item => {
         item.addEventListener('click', () => {
             if (selectedPiece) {
-                // 선택된 퍼즐이 있을 때
                 if (!item.getAttribute('data-image')) {
+                    // 빈 슬롯에 퍼즐 옮기기
                     item.style.backgroundImage = selectedPiece.style.backgroundImage;
                     item.setAttribute('data-image', selectedPiece.getAttribute('data-image'));
                     selectedPiece.style.backgroundImage = '';
                     selectedPiece.removeAttribute('data-image');
                     selectedPiece = null;
+                } else {
+                    // 선택된 퍼즐과 클릭한 슬롯의 퍼즐 교환
+                    const tempImage = item.style.backgroundImage;
+                    const tempData = item.getAttribute('data-image');
+
+                    item.style.backgroundImage = selectedPiece.style.backgroundImage;
+                    item.setAttribute('data-image', selectedPiece.getAttribute('data-image'));
+
+                    selectedPiece.style.backgroundImage = tempImage;
+                    selectedPiece.setAttribute('data-image', tempData);
+
+                    selectedPiece = null; // 선택 상태 초기화
                 }
             } else if (item.getAttribute('data-image')) {
                 // 퍼즐 선택

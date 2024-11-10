@@ -4,6 +4,9 @@ let difference;
 let running = false; // 초기 상태는 정지
 let timerId;
 
+// 현재 선택된 퍼즐 조각
+let selectedPiece = null;
+
 function goBack() {
     const overlay = document.getElementById('overlay');
     const alertBox = document.getElementById('alert-box');
@@ -91,22 +94,11 @@ function updateStopwatch() {
     }
 }
 
-// 성공/실패 처리 함수
-// 성공/실패 처리 함수
-function handleResult(result) {
-    const levelText = document.querySelector('.level-text').textContent;
-    const timerText = document.querySelector('.timer-text').textContent;
-    window.location.href = `result.html?result=${result}&level=${encodeURIComponent(levelText)}&time=${encodeURIComponent(timerText)}`;
-}
-
-window.onload = () => {
-    const overlay = document.getElementById('overlay');
-    const alertBox = document.getElementById('alert-box');
-    overlay.style.display = 'none';
-    alertBox.style.display = 'none';
-    startStopwatch(); // 페이지 로드 시 타이머 시작
-
+// 퍼즐 게임 로직
+function initializeGame() {
     const puzzleSlots = Array.from(document.querySelectorAll('.puzzle-slot'));
+    const gridItems = Array.from(document.querySelectorAll('.grid-item'));
+
     const images = [
         'images/elephant01.png',
         'images/elephant02.png',
@@ -121,10 +113,73 @@ window.onload = () => {
 
     const shuffledImages = images.sort(() => Math.random() - 0.5); // 이미지 랜덤 섞기
 
+    // 퍼즐 슬롯에 이미지 할당
     puzzleSlots.forEach((slot, index) => {
         if (shuffledImages[index]) {
             slot.style.backgroundImage = `url('${shuffledImages[index]}')`;
-            console.log(`Image set for slot ${index}: ${shuffledImages[index]}`); // 디버깅 메시지
+            slot.setAttribute('data-image', shuffledImages[index]); // 이미지 데이터 저장
         }
     });
+
+    // 클릭 이벤트 등록
+    gridItems.forEach(item => {
+        item.addEventListener('click', () => {
+            if (selectedPiece) {
+                // 선택된 퍼즐이 있을 때
+                if (!item.getAttribute('data-image')) {
+                    item.style.backgroundImage = selectedPiece.style.backgroundImage;
+                    item.setAttribute('data-image', selectedPiece.getAttribute('data-image'));
+                    selectedPiece.style.backgroundImage = '';
+                    selectedPiece.removeAttribute('data-image');
+                    selectedPiece = null;
+                }
+            } else if (item.getAttribute('data-image')) {
+                // 퍼즐 선택
+                selectedPiece = item;
+            }
+        });
+    });
+}
+
+// 성공 조건 확인
+function handleResult(result) {
+    const correctOrder = [
+        'images/elephant01.png',
+        'images/elephant02.png',
+        'images/elephant03.png',
+        'images/elephant04.png',
+        'images/elephant05.png',
+        'images/elephant06.png',
+        'images/elephant07.png',
+        'images/elephant08.png',
+        'images/elephant09.png'
+    ];
+
+    const gridItems = Array.from(document.querySelectorAll('.grid-item'));
+    let isCorrect = true;
+
+    correctOrder.forEach((expectedImage, index) => {
+        const item = gridItems[index];
+        const actualImage = item.getAttribute('data-image');
+
+        if (expectedImage !== actualImage) {
+            isCorrect = false;
+        }
+    });
+
+    if (isCorrect) {
+        alert('퍼즐 성공!');
+    } else {
+        alert('퍼즐 실패!');
+    }
+}
+
+window.onload = () => {
+    const overlay = document.getElementById('overlay');
+    const alertBox = document.getElementById('alert-box');
+    overlay.style.display = 'none';
+    alertBox.style.display = 'none';
+    startStopwatch(); // 페이지 로드 시 타이머 시작
+
+    initializeGame(); // 게임 초기화
 };

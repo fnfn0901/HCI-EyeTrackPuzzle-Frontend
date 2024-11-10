@@ -175,13 +175,14 @@ function checkAnswers() {
     });
 
     if (isCorrect) {
-        alert('퍼즐 성공!');
-        endGame();
+        stopStopwatch();
+        setTimeout(() => {
+            handleResult('success'); // 성공 처리
+        }, 500);
     }
 }
 
 function endGame() {
-    stopStopwatch();
     const overlay = document.getElementById('overlay');
     const alertBox = document.getElementById('alert-box');
 
@@ -208,6 +209,14 @@ function endGame() {
 function onPiecePlaced() {
     checkAnswers();
 }
+
+// 성공/실패 처리 함수
+function handleResult(result) {
+    const levelText = document.querySelector('.level-text').textContent;
+    const timerText = document.querySelector('.timer-text').textContent;
+    window.location.href = `result.html?result=${result}&level=${encodeURIComponent(levelText)}&time=${encodeURIComponent(timerText)}`;
+}
+
 
 window.onload = () => {
     const overlay = document.getElementById('overlay');

@@ -106,11 +106,25 @@ window.onload = () => {
     alertBox.style.display = 'none';
     startStopwatch(); // 페이지 로드 시 타이머 시작
 
-    const puzzlePieces = Array.from(document.querySelectorAll('.puzzle-piece'));
-    const shuffledPieces = puzzlePieces.sort(() => Math.random() - 0.5);
+    const puzzleSlots = Array.from(document.querySelectorAll('.puzzle-slot'));
+    const images = [
+        'images/elephant01.png',
+        'images/elephant02.png',
+        'images/elephant03.png',
+        'images/elephant04.png',
+        'images/elephant05.png',
+        'images/elephant06.png',
+        'images/elephant07.png',
+        'images/elephant08.png',
+        'images/elephant09.png'
+    ];
 
-    // 퍼즐 조각 랜덤 배치
-    const gridContainer = document.querySelector('.grid-container');
-    shuffledPieces.forEach(piece => gridContainer.appendChild(piece));
+    const shuffledImages = images.sort(() => Math.random() - 0.5); // 이미지 랜덤 섞기
 
+    puzzleSlots.forEach((slot, index) => {
+        if (shuffledImages[index]) {
+            slot.style.backgroundImage = `url('${shuffledImages[index]}')`;
+            console.log(`Image set for slot ${index}: ${shuffledImages[index]}`); // 디버깅 메시지
+        }
+    });
 };

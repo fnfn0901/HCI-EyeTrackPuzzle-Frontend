@@ -105,4 +105,12 @@ window.onload = () => {
     overlay.style.display = 'none';
     alertBox.style.display = 'none';
     startStopwatch(); // 페이지 로드 시 타이머 시작
+
+    const puzzlePieces = Array.from(document.querySelectorAll('.puzzle-piece'));
+    const shuffledPieces = puzzlePieces.sort(() => Math.random() - 0.5);
+
+    // 퍼즐 조각 랜덤 배치
+    const gridContainer = document.querySelector('.grid-container');
+    shuffledPieces.forEach(piece => gridContainer.appendChild(piece));
+
 };

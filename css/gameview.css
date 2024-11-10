@@ -1,28 +1,5 @@
-@font-face {
-    font-family: "Helvetica Neue";
-    src: url("../fonts/HelveticaNeueRegular.otf") format("opentype");
-}
-
 .game-container {
     position: relative;
-}
-
-.back-button {
-    position: absolute;
-    top: 72px;
-    left: 72px;
-    height: 24px;
-    flex-shrink: 0;
-    cursor: pointer;
-}
-
-.pause-button {
-    position: absolute;
-    top: 72px;
-    right: 72px;
-    height: 24px;
-    flex-shrink: 0;
-    cursor: pointer;
 }
 
 .logo {
@@ -59,22 +36,52 @@
     letter-spacing: 3px;
 }
 
-.puzzle-container {
+.grid-container {
     display: grid;
-    grid-template-columns: repeat(4, 150px);
+    grid-template-columns: repeat(5, 150px);
     gap: 20px;
     position: absolute;
-    justify-content: center;
+    top: 266px;
     left: 50%;
-    top: 200px;
     transform: translateX(-50%);
 }
 
-.puzzle-piece {
+.grid-item {
     width: 150px;
     height: 150px;
-    background-color: #D9D9D9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid #D9D9D9;
+    box-sizing: border-box;
 }
+
+.back-button img,
+.pause-button img {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.puzzle-slot {
+    background: #D9D9D9;
+}
+
+.puzzle-piece {
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+}
+
+.puzzle-piece[data-image="elephant01"] { background-image: url('images/elephant01.png'); }
+.puzzle-piece[data-image="elephant02"] { background-image: url('images/elephant02.png'); }
+.puzzle-piece[data-image="elephant03"] { background-image: url('images/elephant03.png'); }
+.puzzle-piece[data-image="elephant04"] { background-image: url('images/elephant04.png'); }
+.puzzle-piece[data-image="elephant05"] { background-image: url('images/elephant05.png'); }
+.puzzle-piece[data-image="elephant06"] { background-image: url('images/elephant06.png'); }
+.puzzle-piece[data-image="elephant07"] { background-image: url('images/elephant07.png'); }
+.puzzle-piece[data-image="elephant08"] { background-image: url('images/elephant08.png'); }
+.puzzle-piece[data-image="elephant09"] { background-image: url('images/elephant09.png'); }
 
 .overlay {
     position: fixed;

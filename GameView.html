@@ -9,33 +9,53 @@
 </head>
 <body>
     <div class="game-container">
-        <img src="images/Back.svg" alt="Back" class="back-button" onclick="goBack()">
-        <img src="images/Pause.svg" alt="Pause" class="pause-button" onclick="togglePause()">
+        <!-- 로고 -->
         <img src="images/Logo.svg" alt="Logo" class="logo">
+        
+        <!-- 레벨 텍스트 -->
         <div class="level-text">Level 1</div>
+
+        <!-- 타이머 -->
         <div class="timer-text">00:00</div>
-        <div class="puzzle-container">
-            <!-- 퍼즐 조각 생성 -->
-            <div class="puzzle-piece"></div>
-            <div class="puzzle-piece"></div>
-            <div class="puzzle-piece"></div>
-            <div class="puzzle-piece"></div>
-            <div class="puzzle-piece"></div>
-            <div class="puzzle-piece"></div>
-            <div class="puzzle-piece"></div>
-            <div class="puzzle-piece"></div>
-            <div class="puzzle-piece"></div>
-            <div class="puzzle-piece"></div>
-            <div class="puzzle-piece"></div>
-            <div class="puzzle-piece"></div>
-            <div class="puzzle-piece"></div>
-            <div class="puzzle-piece"></div>
-            <div class="puzzle-piece"></div>
-            <div class="puzzle-piece"></div>
+
+        <!-- 5x4 그리드 -->
+        <div class="grid-container">
+            <!-- 첫 번째 줄 -->
+            <div class="grid-item back-button">
+                <img src="images/Back.svg" alt="Back" onclick="goBack()">
+            </div>
+            <div class="grid-item"></div>
+            <div class="grid-item"></div>
+            <div class="grid-item"></div>
+            <div class="grid-item pause-button">
+                <img src="images/Pause.svg" alt="Pause" onclick="togglePause()">
+            </div>
+            
+            <!-- 퍼즐 담는 영역 -->
+            <div class="grid-item"></div>
+            <div class="grid-item puzzle-slot"></div>
+            <div class="grid-item puzzle-slot"></div>
+            <div class="grid-item puzzle-slot"></div>
+            <div class="grid-item"></div>
+            
+            <div class="grid-item"></div>
+            <div class="grid-item puzzle-slot"></div>
+            <div class="grid-item puzzle-slot"></div>
+            <div class="grid-item puzzle-slot"></div>
+            <div class="grid-item"></div>
+            
+            <div class="grid-item"></div>
+            <div class="grid-item puzzle-slot"></div>
+            <div class="grid-item puzzle-slot"></div>
+            <div class="grid-item puzzle-slot"></div>
+            <div class="grid-item"></div>
         </div>
-        <!-- 성공 및 실패 버튼 추가 -->
-        <button class="success-button" onclick="handleResult('success')">성공</button>
-        <button class="failure-button" onclick="handleResult('failure')">실패</button>
+
+        <!-- 성공/실패 버튼 -->
+        <div class="result-buttons">
+            <button class="success-button" onclick="handleResult('success')">성공</button>
+            <button class="failure-button" onclick="handleResult('failure')">실패</button>
+        </div>
     </div>
     <div class="overlay" id="overlay"></div> <!-- 어두워지는 배경 -->
     <div class="alert-box" id="alert-box">

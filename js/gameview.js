@@ -89,7 +89,6 @@ function initializeGame() {
     const puzzleSlots = Array.from(document.querySelectorAll('.puzzle-slot'));
     const answerSlots = Array.from(document.querySelectorAll('.answer'));
 
-    // 이미지 배열 정의
     const correctOrder = [
         'images/elephant01.png',
         'images/elephant02.png',
@@ -102,7 +101,6 @@ function initializeGame() {
         'images/elephant09.png'
     ];
 
-    // 이미지를 랜덤으로 섞음
     const shuffledOrder = [...correctOrder].sort(() => Math.random() - 0.5);
 
     puzzleSlots.forEach((slot, index) => {
@@ -122,8 +120,8 @@ function initializeGame() {
     });
 
     answerSlots.forEach((slot, index) => {
-        slot.setAttribute('data-correct', correctOrder[index]); // 정답 설정
-        slot.removeAttribute('data-image'); // 초기에는 비어 있음
+        slot.setAttribute('data-correct', correctOrder[index]);
+        slot.removeAttribute('data-image');
     });
 }
 
@@ -134,6 +132,8 @@ function handleSlotClick(slot) {
             slot.setAttribute('data-image', selectedPiece.getAttribute('data-image'));
             selectedPiece.style.backgroundImage = '';
             selectedPiece.removeAttribute('data-image');
+
+            selectedPiece.style.outline = ''; // 선택 해제 시 outline 원상복구
             selectedPiece = null;
 
             onPiecePlaced();
@@ -147,12 +147,17 @@ function handleSlotClick(slot) {
             selectedPiece.style.backgroundImage = tempImage;
             selectedPiece.setAttribute('data-image', tempData);
 
+            selectedPiece.style.outline = ''; // 선택 해제 시 outline 원상복구
             selectedPiece = null;
 
             onPiecePlaced();
         }
     } else if (slot.getAttribute('data-image')) {
+        if (selectedPiece) {
+            selectedPiece.style.outline = ''; // 이전 선택 해제
+        }
         selectedPiece = slot;
+        selectedPiece.style.outline = '4px solid #FF8181'; // 외곽선 스타일 적용
     }
 }
 
@@ -177,7 +182,7 @@ function checkAnswers() {
     if (isCorrect) {
         stopStopwatch();
         setTimeout(() => {
-            handleResult('success'); // 성공 처리
+            handleResult('success');
         }, 500);
     }
 }
@@ -210,13 +215,11 @@ function onPiecePlaced() {
     checkAnswers();
 }
 
-// 성공/실패 처리 함수
 function handleResult(result) {
     const levelText = document.querySelector('.level-text').textContent;
     const timerText = document.querySelector('.timer-text').textContent;
     window.location.href = `result.html?result=${result}&level=${encodeURIComponent(levelText)}&time=${encodeURIComponent(timerText)}`;
 }
-
 
 window.onload = () => {
     const overlay = document.getElementById('overlay');

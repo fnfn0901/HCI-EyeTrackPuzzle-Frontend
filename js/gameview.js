@@ -1,62 +1,94 @@
+let isBackAlertActive = false; // 뒤로가기 경고창 상태 플래그
+let isPauseAlertActive = false; // 일시정지 경고창 상태 플래그
+let running = false; // 초기 상태는 정지
 let startTime;
 let updatedTime;
-let difference;
-let running = false; // 초기 상태는 정지
+let difference = 0; // 경과 시간
 let timerId;
 
 let selectedPiece = null;
 
 function goBack() {
+    if (isPauseAlertActive || isBackAlertActive) return; // 다른 경고창 활성화 상태면 뒤로가기 동작 방지
+
+    setAlertState('back'); // 뒤로가기 경고창 표시
+}
+
+function togglePause() {
+    if (isBackAlertActive) return; // 뒤로가기 경고창이 활성화된 상태면 일시정지 방지
+
+    if (running) {
+        setAlertState('pause'); // 일시정지 경고창 표시
+    } else if (isPauseAlertActive) {
+        resumeGame(); // 게임 재개
+    }
+}
+
+function setAlertState(type) {
+    resetAlertState(); // 기존 상태 초기화
+
     const overlay = document.getElementById('overlay');
     const alertBox = document.getElementById('alert-box');
     const alertTitle = document.querySelector('.alert-title');
     const continueButton = document.querySelector('.continue-button');
     const menuButton = document.querySelector('.menu-button');
 
-    stopStopwatch();
+    if (type === 'back') {
+        stopStopwatch();
+        alertTitle.textContent = '게임을 종료하시겠습니까?';
+        continueButton.textContent = '게임 종료';
+        menuButton.textContent = '취소';
 
-    alertTitle.textContent = '게임을 종료하시겠습니까?';
-    continueButton.textContent = '게임 종료';
-    menuButton.textContent = '취소';
+        continueButton.onclick = () => {
+            window.location.href = 'index.html';
+        };
 
-    continueButton.onclick = () => {
-        window.location.href = 'index.html';
-    };
+        menuButton.onclick = () => {
+            resetAlertState();
+            resumeGame(); // 게임 계속
+        };
 
-    menuButton.onclick = () => {
-        overlay.style.display = 'none';
-        alertBox.style.display = 'none';
-        continueGame();
-    };
+        isBackAlertActive = true; // 뒤로가기 경고창 활성화
+    } else if (type === 'pause') {
+        stopStopwatch();
+        alertTitle.textContent = '게임이 일시정지되었습니다.';
+        continueButton.textContent = '게임 계속';
+        menuButton.textContent = '메인 메뉴';
+
+        continueButton.onclick = () => {
+            resetAlertState();
+            resumeGame(); // 게임 재개
+        };
+
+        menuButton.onclick = () => {
+            window.location.href = 'index.html';
+        };
+
+        isPauseAlertActive = true; // 일시정지 경고창 활성화
+    }
 
     overlay.style.display = 'block';
     alertBox.style.display = 'flex';
 }
 
-function togglePause() {
+function resetAlertState() {
     const overlay = document.getElementById('overlay');
     const alertBox = document.getElementById('alert-box');
 
-    if (running) {
-        stopStopwatch();
-        overlay.style.display = 'block';
-        alertBox.style.display = 'flex';
-    }
-}
-
-function continueGame() {
-    const overlay = document.getElementById('overlay');
-    const alertBox = document.getElementById('alert-box');
     overlay.style.display = 'none';
     alertBox.style.display = 'none';
 
+    // 모든 플래그 초기화
+    isBackAlertActive = false;
+    isPauseAlertActive = false;
+}
+
+function resumeGame() {
     startTime = new Date().getTime() - difference;
     running = true;
     timerId = setInterval(updateStopwatch, 100);
-}
 
-function goToMenu() {
-    window.location.href = 'index.html';
+    resetAlertState();
 }
 
 function startStopwatch() {
@@ -187,30 +219,6 @@ function checkAnswers() {
     }
 }
 
-function endGame() {
-    const overlay = document.getElementById('overlay');
-    const alertBox = document.getElementById('alert-box');
-
-    const alertTitle = document.querySelector('.alert-title');
-    const continueButton = document.querySelector('.continue-button');
-    const menuButton = document.querySelector('.menu-button');
-
-    alertTitle.textContent = '축하합니다! 게임이 완료되었습니다.';
-    continueButton.textContent = '메인 메뉴로';
-    menuButton.textContent = '다시 하기';
-
-    continueButton.onclick = () => {
-        window.location.href = 'index.html';
-    };
-
-    menuButton.onclick = () => {
-        window.location.reload();
-    };
-
-    overlay.style.display = 'block';
-    alertBox.style.display = 'flex';
-}
-
 function onPiecePlaced() {
     checkAnswers();
 }
@@ -222,11 +230,7 @@ function handleResult(result) {
 }
 
 window.onload = () => {
-    const overlay = document.getElementById('overlay');
-    const alertBox = document.getElementById('alert-box');
-    overlay.style.display = 'none';
-    alertBox.style.display = 'none';
-
+    resetAlertState(); // 초기화
     startStopwatch();
     initializeGame();
 };

@@ -1,3 +1,12 @@
+/* 초기 상태에서 alert-box와 overlay 숨기기 */
+#overlay {
+    display: none;
+}
+
+#alert-box {
+    display: none;
+}
+
 .game-container {
     position: relative;
 }
@@ -38,7 +47,6 @@
 
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(5, 150px);
     gap: 20px;
     position: absolute;
     top: 266px;
@@ -175,4 +183,25 @@
 
 .continue-button:hover, .menu-button:hover {
     background-color: #357ABD;
+}
+
+/* 레벨별 grid-container 설정 */
+.grid-container.level-1 {
+    grid-template-columns: repeat(4, 150px);
+}
+
+.grid-container.level-2 {
+    grid-template-columns: repeat(5, 150px);
+}
+
+.grid-container.level-3 {
+    grid-template-columns: repeat(6, 150px);
+}
+
+/* 빈 슬롯 스타일 제거 */
+.empty-slot {
+    background: none;
+    border: none;
+    width: 150px;
+    height: 150px;
 }

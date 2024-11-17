@@ -47,13 +47,22 @@ function sliceImage(imageUrl, rows, cols) {
                 imagePieces.push(dataUrl);
             }
         }
-        initializeGame();
+        initializeGame(rows, cols);
     };
 }
 
-function initializeGame() {
+function initializeGame(rows, cols) {
+    const totalPieces = rows * cols; // 필요한 퍼즐 조각 수
     const puzzleSlots = Array.from(document.querySelectorAll('.puzzle-slot'));
     const answerSlots = Array.from(document.querySelectorAll('.answer'));
+    const totalSlots = puzzleSlots.length;
+
+    // 슬롯 개수와 퍼즐 조각 수 일치 여부 확인
+    if (totalSlots !== totalPieces) {
+        console.error(`그리드(${totalSlots})와 퍼즐 조각(${totalPieces})의 수가 일치하지 않습니다!`);
+        return;
+    }
+
     const shuffledOrder = [...imagePieces].sort(() => Math.random() - 0.5);
 
     puzzleSlots.forEach((slot, index) => {

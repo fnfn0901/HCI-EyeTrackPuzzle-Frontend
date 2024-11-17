@@ -75,6 +75,12 @@
     box-sizing: border-box;
 }
 
+.puzzle-slot, .answer {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
 .puzzle-piece {
     background-size: cover;
     background-position: center;

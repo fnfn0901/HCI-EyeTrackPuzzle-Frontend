@@ -1,6 +1,18 @@
+const imagePool = [
+    'images/puzzles/image1.png',
+    'images/puzzles/image2.jpg',
+    'images/puzzles/image3.jpg'
+];
+
 let correctOrder = [];
 let imagePieces = [];
 let selectedPiece = null;
+
+function startGameWithRandomImage(rows, cols) {
+    const randomIndex = Math.floor(Math.random() * imagePool.length);
+    const selectedImage = imagePool[randomIndex];
+    sliceImage(selectedImage, rows, cols);
+}
 
 function sliceImage(imageUrl, rows, cols) {
     const img = new Image();
@@ -71,8 +83,7 @@ function handleSlotClick(slot) {
             selectedPiece.style.outline = '';
             selectedPiece = null;
             checkAnswers();
-        }
-        else {
+        } else {
             const tempImage = slot.style.backgroundImage;
             const tempData = slot.getAttribute('data-image');
 
@@ -85,8 +96,7 @@ function handleSlotClick(slot) {
             selectedPiece.style.outline = '';
             selectedPiece = null;
         }
-    }
-    else if (slot.getAttribute('data-image')) {
+    } else if (slot.getAttribute('data-image')) {
         if (selectedPiece) {
             selectedPiece.style.outline = '';
         }
@@ -97,7 +107,7 @@ function handleSlotClick(slot) {
 
 function checkAnswers() {
     const answerSlots = Array.from(document.querySelectorAll('.answer'));
-    const isCorrect = answerSlots.every((slot, index) => 
+    const isCorrect = answerSlots.every((slot, index) =>
         slot.getAttribute('data-image') === correctOrder[index]
     );
 

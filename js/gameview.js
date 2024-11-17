@@ -1,8 +1,7 @@
 window.addEventListener('load', () => {
-    resetAlertState();
-
     const urlParams = new URLSearchParams(window.location.search);
-    const level = urlParams.get('level'); // URL에서 level 값 가져오기
+    const level = urlParams.get('level');
+    const imageIndex = urlParams.get('imageIndex') || Math.floor(Math.random() * 3); // 랜덤 이미지 기본값
 
     if (level) {
         const rows = level === '1' ? 2 : level === '2' ? 3 : level === '3' ? 4 : 0;
@@ -20,8 +19,8 @@ window.addEventListener('load', () => {
         // 동적으로 grid-container 구성
         setupGrid(level, rows, cols);
 
-        // 퍼즐 게임 시작
-        startGameWithRandomImage(rows, cols);
+        // 선택된 이미지로 게임 시작
+        startGameWithSelectedImage(imageIndex, rows, cols);
 
         // 스톱워치 시작
         startStopwatch();
@@ -29,6 +28,11 @@ window.addEventListener('load', () => {
         console.error("레벨 정보가 없습니다!");
     }
 });
+
+function startGameWithSelectedImage(imageIndex, rows, cols) {
+    const selectedImage = imagePool[imageIndex];
+    sliceImage(selectedImage, rows, cols);
+}
 
 function setupGrid(level) {
     const gridContainer = document.querySelector('.grid-container');
@@ -113,4 +117,12 @@ function handleBackButtonClick() {
 
 function handlePauseButtonClick() {
     togglePause();
+}
+
+function handleResult(result) {
+    const levelText = document.querySelector('.level-text').textContent.split(" ")[1];
+    const timerText = document.querySelector('.timer-text').textContent;
+    const imageIndex = new URLSearchParams(window.location.search).get('imageIndex');
+
+    window.location.href = `result.html?result=${result}&level=${encodeURIComponent(levelText)}&time=${encodeURIComponent(timerText)}&imageIndex=${imageIndex}`;
 }

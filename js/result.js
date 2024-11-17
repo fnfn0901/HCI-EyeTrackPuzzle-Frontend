@@ -1,40 +1,50 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const retryButton = document.getElementById("retryButton");
+    const nextGameButton = document.getElementById("nextGameButton");
+    const chooseLevelButton = document.getElementById("chooseLevelButton");
+    const resultMessage = document.getElementById("resultMessage");
+    const resultLevel = document.getElementById("resultLevel");
+    const resultTimer = document.getElementById("resultTimer");
+
+    // URL에서 쿼리 파라미터 가져오기
+    const urlParams = new URLSearchParams(window.location.search);
+    const level = urlParams.get("level");
+    const time = urlParams.get("time");
+    const imageIndex = urlParams.get("imageIndex"); // 마지막 사용 이미지 인덱스
+
+    // 결과 화면 업데이트
+    resultLevel.textContent = `Level ${level}`;
+    resultTimer.textContent = time;
+    resultMessage.textContent = urlParams.get("result") === "success" ? "You Win!" : "Game Over";
+
+    // Retry 버튼 동작
+    retryButton.addEventListener("click", () => {
+        if (level && imageIndex) {
+            window.location.href = `gameview.html?level=${level}&imageIndex=${imageIndex}`;
+        }
+    });
+
+    // Next Game 버튼 동작
+    nextGameButton.addEventListener("click", () => {
+        if (level) {
+            const totalImages = 3; // 이미지 개수
+            let newImageIndex = Math.floor(Math.random() * totalImages);
+
+            // 마지막 이미지 제외 로직
+            while (newImageIndex.toString() === imageIndex) {
+                newImageIndex = Math.floor(Math.random() * totalImages);
+            }
+
+            window.location.href = `gameview.html?level=${level}&imageIndex=${newImageIndex}`;
+        }
+    });
+
+    // Choose Level 버튼 동작
+    chooseLevelButton.addEventListener("click", () => {
+        window.location.href = "index.html";
+    });
+});
+
 function goToMenu() {
-    window.location.href = 'index.html';
+    window.location.href = "index.html";
 }
-
-// URL 파라미터에서 결과 가져오기
-window.onload = () => {
-    const params = new URLSearchParams(window.location.search);
-    const result = params.get('result');
-    const level = params.get('level');
-    const time = params.get('time');
-
-    // 레벨과 타이머 표시 설정
-    const resultLevel = document.getElementById('resultLevel');
-    const resultTimer = document.getElementById('resultTimer');
-    resultLevel.textContent = level || '레벨';
-    resultTimer.textContent = time || '00:00';
-
-    // 결과 메시지 설정
-    const resultMessage = document.getElementById('resultMessage');
-    if (result === 'success') {
-        resultMessage.textContent = 'Game Complete!';
-    } else if (result === 'failure') {
-        resultMessage.textContent = 'Game Over';
-        resultMessage.style.color = '#FF8181'; // 실패 시 색상 변경
-    }
-
-    // 버튼 클릭 이벤트 설정
-    document.getElementById('retryButton').onclick = () => {
-        window.location.href = 'gameview.html';
-    };
-    document.getElementById('nextGameButton').onclick = () => {
-        window.location.href = 'gameview.html';
-    };
-    document.getElementById('chooseLevelButton').onclick = () => {
-        window.location.href = 'index.html';
-    };
-    document.getElementById('mainMenuButton').onclick = () => {
-        window.location.href = 'index.html';
-    };
-};

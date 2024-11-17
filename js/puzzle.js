@@ -52,12 +52,11 @@ function sliceImage(imageUrl, rows, cols) {
 }
 
 function initializeGame(rows, cols) {
-    const totalPieces = rows * cols; // 필요한 퍼즐 조각 수
+    const totalPieces = rows * cols;
     const puzzleSlots = Array.from(document.querySelectorAll('.puzzle-slot'));
     const answerSlots = Array.from(document.querySelectorAll('.answer'));
     const totalSlots = puzzleSlots.length;
 
-    // 슬롯 개수와 퍼즐 조각 수 일치 여부 확인
     if (totalSlots !== totalPieces) {
         console.error(`그리드(${totalSlots})와 퍼즐 조각(${totalPieces})의 수가 일치하지 않습니다!`);
         return;
@@ -65,6 +64,7 @@ function initializeGame(rows, cols) {
 
     const shuffledOrder = [...imagePieces].sort(() => Math.random() - 0.5);
 
+    // 퍼즐 슬롯에 섞인 조각 배치
     puzzleSlots.forEach((slot, index) => {
         if (shuffledOrder[index]) {
             slot.style.backgroundImage = `url('${shuffledOrder[index]}')`;
@@ -72,11 +72,13 @@ function initializeGame(rows, cols) {
         }
     });
 
+    // 답 슬롯에 정답 데이터 설정
     answerSlots.forEach((slot, index) => {
         slot.setAttribute('data-correct', correctOrder[index]);
-        slot.removeAttribute('data-image');
+        slot.removeAttribute('data-image'); // 초기 상태에서는 이미지 없음
     });
 
+    // 이벤트 리스너 등록
     [...puzzleSlots, ...answerSlots].forEach(slot => {
         slot.addEventListener('click', () => handleSlotClick(slot));
     });
@@ -85,14 +87,17 @@ function initializeGame(rows, cols) {
 function handleSlotClick(slot) {
     if (selectedPiece) {
         if (!slot.getAttribute('data-image')) {
+            // 빈 슬롯으로 이동
             slot.style.backgroundImage = selectedPiece.style.backgroundImage;
             slot.setAttribute('data-image', selectedPiece.getAttribute('data-image'));
             selectedPiece.style.backgroundImage = '';
             selectedPiece.removeAttribute('data-image');
             selectedPiece.style.outline = '';
             selectedPiece = null;
-            checkAnswers();
+
+            checkAnswers(); // 정답 체크
         } else {
+            // 슬롯 간 교환
             const tempImage = slot.style.backgroundImage;
             const tempData = slot.getAttribute('data-image');
 
@@ -106,6 +111,7 @@ function handleSlotClick(slot) {
             selectedPiece = null;
         }
     } else if (slot.getAttribute('data-image')) {
+        // 조각 선택
         if (selectedPiece) {
             selectedPiece.style.outline = '';
         }
@@ -116,6 +122,7 @@ function handleSlotClick(slot) {
 
 function checkAnswers() {
     const answerSlots = Array.from(document.querySelectorAll('.answer'));
+
     const isCorrect = answerSlots.every((slot, index) =>
         slot.getAttribute('data-image') === correctOrder[index]
     );

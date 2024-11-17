@@ -5,9 +5,8 @@ window.addEventListener('load', () => {
     const level = urlParams.get('level'); // URL에서 level 값 가져오기
 
     if (level) {
-        // 레벨에 따른 행(row)과 열(col) 설정
         const rows = level === '1' ? 2 : level === '2' ? 3 : level === '3' ? 4 : 0;
-        const cols = rows; // 행과 열이 동일한 정사각형 퍼즐
+        const cols = rows;
 
         if (rows === 0 || cols === 0) {
             console.error("잘못된 레벨 정보입니다!");
@@ -23,6 +22,9 @@ window.addEventListener('load', () => {
 
         // 퍼즐 게임 시작
         startGameWithRandomImage(rows, cols);
+
+        // 스톱워치 시작
+        startStopwatch();
     } else {
         console.error("레벨 정보가 없습니다!");
     }
@@ -54,7 +56,7 @@ function setupGrid(level) {
             ['puzzle-slot', 'answer', 'answer', 'answer', 'answer', 'puzzle-slot'],
             ['puzzle-slot', 'answer', 'answer', 'answer', 'answer', 'puzzle-slot'],
             ['puzzle-slot', 'answer', 'answer', 'answer', 'answer', 'puzzle-slot'],
-            ['', 'answer', 'answer', 'answer', 'answer', ''],
+            ['', 'puzzle-slot', 'puzzle-slot', 'puzzle-slot', 'puzzle-slot', ''],
         ];
     }
 

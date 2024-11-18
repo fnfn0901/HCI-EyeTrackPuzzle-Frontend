@@ -21,4 +21,9 @@ document.addEventListener("DOMContentLoaded", function () {
         // 버튼 컨테이너에 추가
         buttonContainer.appendChild(level3Button);
     });
+    
+    // "Help" 버튼 클릭 시 Help.html로 이동
+    helpButton.addEventListener("click", function () {
+        window.location.href = "Help.html";
+    });
 });

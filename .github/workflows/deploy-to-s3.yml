@@ -29,7 +29,13 @@ jobs:
       # 4. S3에 파일 업로드
       - name: Deploy to S3
         run: |
-          aws s3 sync ./ s3://focuspuzzles3bucket --delete --acl public-read \
+          aws s3 sync . s3://focuspuzzles3bucket --delete \
           --exclude ".git/*" \
           --exclude ".github/*" \
-          --exclude "*.md"
+          --exclude "*.md" \
+          --exclude "README.md"
+
+      # 5. S3 버킷 정적 웹사이트 설정 (선택 사항)
+      - name: Configure S3 bucket for static website hosting
+        run: |
+          aws s3 website s3://focuspuzzles3bucket --index-document index.html --error-document error.html

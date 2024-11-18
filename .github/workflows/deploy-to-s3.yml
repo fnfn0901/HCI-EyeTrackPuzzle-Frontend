@@ -29,4 +29,13 @@ jobs:
       # 4. S3에 파일 업로드
       - name: Deploy to S3
         run: |
-          aws s3 sync . s3://focuspuzzles3bucket --delete
+          aws s3 sync ./build s3://focuspuzzles3bucket --delete --acl public-read
+
+      # 5. CloudFront 캐시 무효화
+      - name: Invalidate CloudFront cache
+        uses: awact/cloudfront-action@v1
+        with:
+          distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+          paths: '/*'
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

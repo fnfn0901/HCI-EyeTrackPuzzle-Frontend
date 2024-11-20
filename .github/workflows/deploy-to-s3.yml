@@ -17,7 +17,7 @@ jobs:
     - name: Sync to S3
       uses: jakejarvis/s3-sync-action@v0.5.1
       with:
-        args: --acl public-read --exact-timestamps
+        args: --exact-timestamps --exclude ".git/*"
       env:
         AWS_S3_BUCKET: focuspuzzles3bucket
         AWS_REGION: ap-northeast-2
@@ -41,7 +41,7 @@ jobs:
           fi
 
           # S3에서 최신 파일 다운로드 (기존 파일 유지)
-          aws s3 sync s3://focuspuzzlebucket $DEPLOY_DIR --region ap-northeast-2
+          aws s3 sync s3://focuspuzzles3bucket $DEPLOY_DIR --region ap-northeast-2
 
           # 디렉토리 권한 설정
           chmod -R 755 $DEPLOY_DIR

@@ -9,9 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search);
     const level = urlParams.get("level");
     const time = urlParams.get("time");
-    const imageIndex = urlParams.get("imageIndex") !== null && urlParams.get("imageIndex") !== "null" 
-        ? urlParams.get("imageIndex") 
-        : 0; // 기본값 0 설정
+    const imageIndex = urlParams.get("imageIndex"); // 기본값 설정 제거
 
     // 결과 화면 업데이트
     resultLevel.textContent = `Level ${level}`;
@@ -21,8 +19,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Retry 버튼 동작
     retryButton.addEventListener("click", () => {
         if (level) {
-            console.log(`Retry 경로: ./GameView.html?level=${level}&imageIndex=${imageIndex}`); // 디버깅용
-            window.location.href = `./GameView.html?level=${level}&imageIndex=${imageIndex}`;
+            console.log(`Retry 경로 생성 중: level=${level}, imageIndex=${imageIndex}`);
+            
+            const retryImageIndex = imageIndex !== null && imageIndex !== "null" 
+                ? imageIndex 
+                : Math.floor(Math.random() * 3); // 기본값을 랜덤으로 설정 가능
+
+            console.log(`Retry 경로: ./GameView.html?level=${level}&imageIndex=${retryImageIndex}`);
+            window.location.href = `./GameView.html?level=${level}&imageIndex=${retryImageIndex}`;
         } else {
             console.error("레벨 정보가 없습니다!");
         }

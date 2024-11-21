@@ -34,7 +34,7 @@ jobs:
         username: ec2-user
         key: ${{ secrets.EC2_SSH_KEY }}
         port: 22
-        timeout: 120
+        timeout: 120s
         debug: true
         script: |
           # 배포 디렉토리 설정

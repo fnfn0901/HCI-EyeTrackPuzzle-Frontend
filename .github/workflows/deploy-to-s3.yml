@@ -34,6 +34,8 @@ jobs:
         username: ec2-user
         key: ${{ secrets.EC2_SSH_KEY }}
         port: 22
+        timeout: 120
+        debug: true
         script: |
           # 배포 디렉토리 설정
           DEPLOY_DIR="/home/ec2-user/focuspuzzle"

@@ -23,7 +23,7 @@
 .level-text {
     position: absolute;
     top: 72px;
-    left: 400px;
+    left: calc(50% - 300px);
     color: #4A90E2;
     font-family: "Helvetica Neue", sans-serif;
     font-size: 20px;
@@ -35,7 +35,7 @@
 .timer-text {
     position: absolute;
     top: 72px;
-    right: 400px;
+    right: calc(50% - 300px);
     color: #4A90E2;
     text-align: right;
     font-family: "Helvetica Neue", sans-serif;
@@ -49,7 +49,7 @@
     display: grid;
     gap: 20px;
     position: absolute;
-    top: 266px;
+    top: 200px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -94,16 +94,6 @@
     background-position: center;
     cursor: pointer;
 }
-
-.puzzle-piece[data-image="elephant01"] { background-image: url('images/elephant01.png'); }
-.puzzle-piece[data-image="elephant02"] { background-image: url('images/elephant02.png'); }
-.puzzle-piece[data-image="elephant03"] { background-image: url('images/elephant03.png'); }
-.puzzle-piece[data-image="elephant04"] { background-image: url('images/elephant04.png'); }
-.puzzle-piece[data-image="elephant05"] { background-image: url('images/elephant05.png'); }
-.puzzle-piece[data-image="elephant06"] { background-image: url('images/elephant06.png'); }
-.puzzle-piece[data-image="elephant07"] { background-image: url('images/elephant07.png'); }
-.puzzle-piece[data-image="elephant08"] { background-image: url('images/elephant08.png'); }
-.puzzle-piece[data-image="elephant09"] { background-image: url('images/elephant09.png'); }
 
 .overlay {
     position: fixed;
@@ -195,7 +185,13 @@
 }
 
 .grid-container.level-3 {
-    grid-template-columns: repeat(6, 150px);
+    grid-template-columns: repeat(6, 100px);
+}
+
+/* 레벨 3에서 grid-item 크기 줄이기 */
+.grid-container.level-3 .grid-item {
+    width: 100px;
+    height: 100px;
 }
 
 /* 빈 슬롯 스타일 제거 */

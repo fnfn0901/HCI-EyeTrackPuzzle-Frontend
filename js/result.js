@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const retryButton = document.getElementById("retryButton");
     const nextGameButton = document.getElementById("nextGameButton");
-    const chooseLevelButton = document.getElementById("chooseLevelButton");
     const resultMessage = document.getElementById("resultMessage");
     const resultLevel = document.getElementById("resultLevel");
     const resultTimer = document.getElementById("resultTimer");
@@ -41,11 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             console.error("레벨 파라미터가 누락되었습니다.");
         }
-    });
-
-    // Choose Level 버튼 동작
-    chooseLevelButton.addEventListener("click", () => {
-        window.location.href = "./index.html";
     });
 });
 

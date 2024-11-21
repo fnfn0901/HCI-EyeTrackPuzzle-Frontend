@@ -38,13 +38,16 @@ jobs:
           # 배포 디렉토리 설정
           DEPLOY_DIR="/home/ec2-user/focuspuzzle"
 
-          # 디렉토리가 없는 경우 생성
-          if [ ! -d "$DEPLOY_DIR" ]; then
-            mkdir -p $DEPLOY_DIR
+          # AWS CLI 설치 확인
+          if ! command -v aws &> /dev/null; then
+            curl "https://awscli.amazonaws.com/aws-cli-v2-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
           fi
 
-          # S3에서 최신 파일 다운로드 (기존 파일 유지)
-          aws s3 sync s3://focuspuzzles3bucket $DEPLOY_DIR --region ap-northeast-2
+          # S3에서 최신 파일 동기화
+          aws s3 sync s3://focuspuzzles3bucket $DEPLOY_DIR --region ap-northeast-2 || exit 1
 
           # 디렉토리 권한 설정
           chmod -R 755 $DEPLOY_DIR
+          echo "Deployment completed successfully"

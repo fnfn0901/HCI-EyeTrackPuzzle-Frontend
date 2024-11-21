@@ -20,7 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Retry 버튼 동작
     retryButton.addEventListener("click", () => {
         if (level && imageIndex) {
-            window.location.href = `gameview.html?level=${level}&imageIndex=${imageIndex}`;
+            window.location.href = `./gameview.html?level=${level}&imageIndex=${imageIndex}`;
+        } else {
+            console.error("필수 파라미터가 누락되었습니다.");
         }
     });
 
@@ -35,16 +37,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 newImageIndex = Math.floor(Math.random() * totalImages);
             }
 
-            window.location.href = `gameview.html?level=${level}&imageIndex=${newImageIndex}`;
+            window.location.href = `./gameview.html?level=${level}&imageIndex=${newImageIndex}`;
+        } else {
+            console.error("레벨 파라미터가 누락되었습니다.");
         }
     });
 
     // Choose Level 버튼 동작
     chooseLevelButton.addEventListener("click", () => {
-        window.location.href = "index.html";
+        window.location.href = "./index.html";
     });
 });
 
 function goToMenu() {
-    window.location.href = "index.html";
+    window.location.href = "./index.html";
 }

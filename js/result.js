@@ -9,7 +9,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search);
     const level = urlParams.get("level");
     const time = urlParams.get("time");
-    const imageIndex = urlParams.get("imageIndex"); // 마지막 사용 이미지 인덱스
+    const imageIndex = urlParams.get("imageIndex") !== null && urlParams.get("imageIndex") !== "null" 
+        ? urlParams.get("imageIndex") 
+        : 0; // 기본값 0 설정
 
     // 결과 화면 업데이트
     resultLevel.textContent = `Level ${level}`;
@@ -18,10 +20,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Retry 버튼 동작
     retryButton.addEventListener("click", () => {
-        if (level && imageIndex) {
-            window.location.href = `./gameview.html?level=${level}&imageIndex=${imageIndex}`;
+        if (level) {
+            console.log(`Retry 경로: ./GameView.html?level=${level}&imageIndex=${imageIndex}`); // 디버깅용
+            window.location.href = `./GameView.html?level=${level}&imageIndex=${imageIndex}`;
         } else {
-            console.error("필수 파라미터가 누락되었습니다.");
+            console.error("레벨 정보가 없습니다!");
         }
     });
 
@@ -36,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 newImageIndex = Math.floor(Math.random() * totalImages);
             }
 
-            window.location.href = `./gameview.html?level=${level}&imageIndex=${newImageIndex}`;
+            window.location.href = `./GameView.html?level=${level}&imageIndex=${newImageIndex}`;
         } else {
             console.error("레벨 파라미터가 누락되었습니다.");
         }

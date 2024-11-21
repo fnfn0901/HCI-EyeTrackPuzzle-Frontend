@@ -1,7 +1,9 @@
 window.addEventListener('load', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const level = urlParams.get('level');
-    const imageIndex = urlParams.get('imageIndex') || Math.floor(Math.random() * 3); // 랜덤 이미지 기본값
+    const imageIndex = urlParams.get('imageIndex') !== null && urlParams.get('imageIndex') !== "null" 
+        ? urlParams.get('imageIndex') 
+        : Math.floor(Math.random() * 3); // 랜덤 기본값
 
     if (level) {
         const rows = level === '1' ? 2 : level === '2' ? 3 : level === '3' ? 4 : 0;

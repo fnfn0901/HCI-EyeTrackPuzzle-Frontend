@@ -3,13 +3,23 @@ const imagePool = [];
 // S3 이미지 목록 가져오기
 async function fetchImages() {
     try {
-        const response = await fetch('https://focuspuzzles3bucket.s3.ap-northeast-2.amazonaws.com/images/puzzles/');        const images = await response.json();
-        imagePool.push(...images);
+        const response = await fetch('https://focuspuzzles3bucket.s3.ap-northeast-2.amazonaws.com/?list-type=2&prefix=images/puzzles/');
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const xmlText = await response.text();
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+
+        const keys = Array.from(xmlDoc.getElementsByTagName("Key")).map(node => node.textContent);
+        console.log("받은 이미지 키 목록:", keys);
+
+        const baseUrl = 'https://focuspuzzles3bucket.s3.ap-northeast-2.amazonaws.com/';
+        imagePool.push(...keys.map(key => baseUrl + key));
     } catch (error) {
         console.error('이미지 목록을 가져오는 중 오류 발생:', error);
     }
 }
-
 window.addEventListener('load', async () => {
     await fetchImages(); // 이미지 목록 가져오기
 

@@ -168,9 +168,9 @@ function handleResult(result) {
     const levelText = document.querySelector('.level-text').textContent.split(' ')[1];
     const timerText = document.querySelector('.timer-text').textContent;
     const imageIndex = new URLSearchParams(window.location.search).get('imageIndex');
-    
-    // imagePool을 JSON 문자열로 직렬화
-    const imagePoolParam = encodeURIComponent(JSON.stringify(imagePool));
-    
-    window.location.href = `result.html?result=${result}&level=${encodeURIComponent(levelText)}&time=${encodeURIComponent(timerText)}&imageIndex=${imageIndex}&imagePool=${imagePoolParam}`;
+
+    // imagePool을 sessionStorage에 저장
+    sessionStorage.setItem('imagePool', JSON.stringify(imagePool));
+
+    window.location.href = `result.html?result=${result}&level=${encodeURIComponent(levelText)}&time=${encodeURIComponent(timerText)}&imageIndex=${imageIndex}`;
 }

@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const level = urlParams.get("level");
     const time = urlParams.get("time");
     const imageIndex = urlParams.get("imageIndex");
-    const imagePool = JSON.parse(decodeURIComponent(urlParams.get("imagePool"))); // imagePool 복원
+    const imagePool = JSON.parse(sessionStorage.getItem("imagePool")) || [];
 
     // 결과 화면 업데이트
     resultLevel.textContent = `Level ${level}`;
@@ -20,10 +20,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Retry 버튼 동작
     retryButton.addEventListener("click", () => {
         if (level) {
+            // imageIndex가 유효하면 그대로 사용
             const retryImageIndex = imageIndex !== null && imageIndex !== "null" 
                 ? imageIndex 
-                : Math.floor(Math.random() * imagePool.length);
-            
+                : Math.floor(Math.random() * imagePool.length); // 이미지가 없는 경우 랜덤 선택
+
+            // GameView로 이동
             window.location.href = `./GameView.html?level=${level}&imageIndex=${retryImageIndex}`;
         } else {
             console.error("레벨 정보가 없습니다!");
@@ -35,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (level) {
             const totalImages = imagePool.length;
 
-            // sessionStorage에 방문한 이미지 목록 가져오기
+            // sessionStorage에서 방문한 이미지 목록 가져오기
             let viewedImages = JSON.parse(sessionStorage.getItem('viewedImages')) || [];
 
             // 방문하지 않은 이미지 목록 필터링
@@ -59,6 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 sessionStorage.setItem('viewedImages', JSON.stringify(viewedImages));
             }
 
+            // GameView로 이동
             window.location.href = `./GameView.html?level=${level}&imageIndex=${newImageIndex}`;
         } else {
             console.error("레벨 정보가 없습니다!");

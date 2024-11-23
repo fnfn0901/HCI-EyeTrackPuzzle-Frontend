@@ -65,6 +65,7 @@ function startGame(imageIndex, rows, cols) {
 
 function sliceAndInitialize(imageUrl, rows, cols) {
     const img = new Image();
+    img.crossOrigin = "Anonymous"; // CORS 문제 해결
     img.src = imageUrl;
 
     img.onload = () => {

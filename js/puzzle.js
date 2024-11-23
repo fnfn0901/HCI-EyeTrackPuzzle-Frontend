@@ -2,21 +2,17 @@ const imagePool = []; // 이미지 URL을 저장하는 전역 배열
 
 async function fetchImages() {
     try {
-        // S3 REST API 호출
         const response = await fetch('https://focuspuzzles3bucket.s3.ap-northeast-2.amazonaws.com/?list-type=2&prefix=images/puzzles/');
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        // XML 응답 텍스트를 가져옴
         const xmlText = await response.text();
         console.log("받은 XML 응답:", xmlText); // 디버깅용
 
-        // XML 파싱
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlText, "text/xml");
 
-        // XML에서 <Key> 태그 값을 추출하여 이미지 URL을 생성
         const keys = Array.from(xmlDoc.getElementsByTagName("Key")).map(node => node.textContent);
         const baseUrl = 'https://focuspuzzles3bucket.s3.ap-northeast-2.amazonaws.com/';
         imagePool.push(...keys.map(key => baseUrl + key));
@@ -28,7 +24,12 @@ async function fetchImages() {
 }
 
 window.addEventListener('load', async () => {
-    await fetchImages(); // S3에서 이미지 가져오기
+    await fetchImages(); // S3에서 이미지 목록 가져오기
+
+    if (imagePool.length === 0) {
+        console.error('이미지 목록이 비어 있습니다. 게임을 초기화할 수 없습니다.');
+        return;
+    }
 
     const urlParams = new URLSearchParams(window.location.search);
     const level = urlParams.get('level');
@@ -49,7 +50,6 @@ window.addEventListener('load', async () => {
         return;
     }
 
-    // Grid 초기화
     const gridSetup = setupGrid(level, rows, cols);
     if (!gridSetup || gridSetup.puzzleSlotCount === undefined || gridSetup.answerSlotCount === undefined) {
         console.error('setupGrid 함수의 반환값이 유효하지 않습니다.');
@@ -62,10 +62,7 @@ window.addEventListener('load', async () => {
         return;
     }
 
-    // 게임 시작
     startGame(imageIndex, rows, cols);
-
-    // 스톱워치 시작
     startStopwatch();
 });
 

@@ -3,8 +3,7 @@ const imagePool = [];
 // S3 이미지 목록 가져오기
 async function fetchImages() {
     try {
-        const response = await fetch('../images/puzzles');
-        const images = await response.json();
+        const response = await fetch('https://focuspuzzles3bucket.s3.ap-northeast-2.amazonaws.com/images/puzzles/');        const images = await response.json();
         imagePool.push(...images);
     } catch (error) {
         console.error('이미지 목록을 가져오는 중 오류 발생:', error);

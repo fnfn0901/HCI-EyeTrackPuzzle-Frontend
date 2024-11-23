@@ -59,6 +59,53 @@ function startGame(imageIndex, rows, cols) {
     sliceAndInitialize(selectedImage, rows, cols);
 }
 
+function sliceAndInitialize(imageUrl, rows, cols, callback) {
+    const img = new Image();
+    img.src = imageUrl;
+
+    img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const pieceWidth = img.width / cols;
+        const pieceHeight = img.height / rows;
+
+        correctOrder = [];
+        imagePieces = [];
+
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                canvas.width = pieceWidth;
+                canvas.height = pieceHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(
+                    img,
+                    col * pieceWidth,
+                    row * pieceHeight,
+                    pieceWidth,
+                    pieceHeight,
+                    0,
+                    0,
+                    pieceWidth,
+                    pieceHeight
+                );
+                const dataUrl = canvas.toDataURL();
+                correctOrder.push(dataUrl);
+                imagePieces.push(dataUrl);
+            }
+        }
+
+        initializeGrid(rows, cols);
+        setupEventListeners();
+
+        // 로드 완료 후 콜백 호출
+        if (callback) callback();
+    };
+
+    img.onerror = () => {
+        console.error(`이미지 로드 실패: ${imageUrl}`);
+        if (callback) callback();
+    };
+}
+
 function getRandomImage() {
     if (imagePool.length === 0) {
         console.error('이미지 풀이 비어 있습니다.');

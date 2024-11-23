@@ -135,7 +135,7 @@ function createGridItems(container, layout) {
 
 function goBack() {
     stopStopwatch();
-    window.location.href = 'menu.html'; // 메인 메뉴로 이동
+    window.location.href = 'level.html'; // 메인 메뉴로 이동
 }
 
 function togglePause() {

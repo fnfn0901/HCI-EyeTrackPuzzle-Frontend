@@ -61,9 +61,13 @@ function startGameWithLoading(imageIndex, rows, cols) {
 }
 
 function startGame(imageIndex, rows, cols) {
-    const selectedImage = imageIndex !== null ? imagePool[imageIndex] : getRandomImage();
+    const selectedImage = imageIndex !== null && imageIndex >= 0 && imageIndex < imagePool.length
+        ? imagePool[imageIndex]
+        : getRandomImage();
+
     if (!selectedImage) {
         console.error('선택된 이미지가 없습니다. 게임을 시작할 수 없습니다.');
+        hideLoadingSpinner(); // 로딩 스피너 숨김
         return;
     }
     sliceAndInitialize(selectedImage, rows, cols);
@@ -71,7 +75,7 @@ function startGame(imageIndex, rows, cols) {
 
 function sliceAndInitialize(imageUrl, rows, cols) {
     const img = new Image();
-    img.crossOrigin = "Anonymous"; // CORS 문제 해결
+    img.crossOrigin = "Anonymous";
     img.src = imageUrl;
 
     img.onload = () => {
@@ -104,12 +108,17 @@ function sliceAndInitialize(imageUrl, rows, cols) {
             }
         }
 
-        initializeGrid(rows, cols); // 새로 정의한 initializeGrid 함수 호출
-        setupEventListeners(); // 이벤트 리스너 설정
+        initializeGrid(rows, cols);
+        setupEventListeners();
+
+        // 로딩 스피너 숨기기
+        hideLoadingSpinner();
     };
 
     img.onerror = () => {
         console.error(`이미지 로드 실패: ${imageUrl}`);
+        // 로딩 스피너 숨기기
+        hideLoadingSpinner();
     };
 }
 

@@ -17,8 +17,6 @@ async function fetchImages() {
 
         if (imagePool.length === 0) {
             console.error('S3에서 가져온 이미지 목록이 비어 있습니다.');
-        } else {
-            console.log("생성된 이미지 URL 목록:", imagePool);
         }
     } catch (error) {
         console.error('이미지 목록을 가져오는 중 오류 발생:', error);

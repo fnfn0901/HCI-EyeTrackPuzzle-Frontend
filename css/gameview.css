@@ -202,22 +202,20 @@
     height: 150px;
 }
 
-/* 로딩 스피너 스타일 */
 #loading-spinner {
-    position: fixed !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 50px;
     height: 50px;
     border: 5px solid #f3f3f3;
-    border-top: 5px solid #357ABD; /* 회전 애니메이션 색상 */
+    border-top: 5px solid #357ABD;
     border-radius: 50%;
-    animation: spin 1s linear infinite; /* 회전 애니메이션 */
-    z-index: 1000; /* 최상위로 배치 */
+    animation: spin 1s linear infinite;
+    z-index: 1000;
     display: none; /* 기본적으로 숨김 */
-    pointer-events: none; /* 마우스 이벤트 차단 */
-    margin: 0; /* 여백 제거 */
+    pointer-events: none;
 }
 
 @keyframes spin {

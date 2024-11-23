@@ -51,5 +51,5 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function goToMenu() {
-    window.location.href = "./index.html";
+    window.location.href = "./level.html";
 }

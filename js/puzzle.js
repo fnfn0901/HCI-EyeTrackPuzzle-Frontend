@@ -8,8 +8,6 @@ async function fetchImages() {
         }
 
         const xmlText = await response.text();
-        console.log("받은 XML 응답:", xmlText); // 디버깅용
-
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlText, "text/xml");
 
@@ -17,7 +15,11 @@ async function fetchImages() {
         const baseUrl = 'https://focuspuzzles3bucket.s3.ap-northeast-2.amazonaws.com/';
         imagePool.push(...keys.map(key => baseUrl + key));
 
-        console.log("생성된 이미지 URL 목록:", imagePool); // 디버깅용
+        if (imagePool.length === 0) {
+            console.error('S3에서 가져온 이미지 목록이 비어 있습니다.');
+        } else {
+            console.log("생성된 이미지 URL 목록:", imagePool);
+        }
     } catch (error) {
         console.error('이미지 목록을 가져오는 중 오류 발생:', error);
     }
@@ -27,7 +29,7 @@ window.addEventListener('load', async () => {
     await fetchImages(); // S3에서 이미지 목록 가져오기
 
     if (imagePool.length === 0) {
-        console.error('이미지 목록이 비어 있습니다. 게임을 초기화할 수 없습니다.');
+        console.error('이미지 풀이 비어 있습니다. 게임을 시작할 수 없습니다.');
         return;
     }
 

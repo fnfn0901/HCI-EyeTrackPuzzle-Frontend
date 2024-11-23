@@ -116,6 +116,37 @@ function setupEventListeners() {
     slots.forEach(slot => slot.addEventListener('click', () => handleSlotClick(slot)));
 }
 
+function handleSlotClick(slot) {
+    if (selectedPiece) {
+        if (!slot.getAttribute('data-image')) {
+            slot.style.backgroundImage = selectedPiece.style.backgroundImage;
+            slot.setAttribute('data-image', selectedPiece.getAttribute('data-image'));
+            selectedPiece.style.backgroundImage = '';
+            selectedPiece.removeAttribute('data-image');
+            selectedPiece.style.outline = '';
+            selectedPiece = null;
+
+            checkAnswers();
+        } else {
+            const tempImage = slot.style.backgroundImage;
+            const tempData = slot.getAttribute('data-image');
+
+            slot.style.backgroundImage = selectedPiece.style.backgroundImage;
+            slot.setAttribute('data-image', selectedPiece.getAttribute('data-image'));
+
+            selectedPiece.style.backgroundImage = tempImage;
+            selectedPiece.setAttribute('data-image', tempData);
+
+            selectedPiece.style.outline = '';
+            selectedPiece = null;
+        }
+    } else if (slot.getAttribute('data-image')) {
+        if (selectedPiece) selectedPiece.style.outline = '';
+        selectedPiece = slot;
+        selectedPiece.style.outline = '4px solid #FF8181';
+    }
+}
+
 function initializeGrid(rows, cols) {
     const puzzleSlots = Array.from(document.querySelectorAll('.puzzle-slot'));
     const answerSlots = Array.from(document.querySelectorAll('.answer'));

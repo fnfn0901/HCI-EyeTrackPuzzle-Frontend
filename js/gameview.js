@@ -79,8 +79,29 @@ function sliceAndInitialize(imageUrl, rows, cols) {
 
     img.onload = () => {
         const canvas = document.createElement('canvas');
-        const pieceWidth = img.width / cols;
-        const pieceHeight = img.height / rows;
+        const ctx = canvas.getContext('2d');
+
+        const aspectRatioImage = img.width / img.height;
+        const aspectRatioGrid = cols / rows;
+
+        // 이미지와 그리드의 비율 차이에 따라 확대/축소 결정
+        let sx, sy, sWidth, sHeight;
+        if (aspectRatioImage > aspectRatioGrid) {
+            // 이미지가 더 넓은 경우: 세로를 기준으로 확대
+            sHeight = img.height;
+            sWidth = sHeight * aspectRatioGrid;
+            sx = (img.width - sWidth) / 2;
+            sy = 0;
+        } else {
+            // 이미지가 더 높은 경우: 가로를 기준으로 확대
+            sWidth = img.width;
+            sHeight = sWidth / aspectRatioGrid;
+            sx = 0;
+            sy = (img.height - sHeight) / 2;
+        }
+
+        const pieceWidth = sWidth / cols;
+        const pieceHeight = sHeight / rows;
 
         correctOrder = [];
         imagePieces = [];
@@ -89,11 +110,11 @@ function sliceAndInitialize(imageUrl, rows, cols) {
             for (let col = 0; col < cols; col++) {
                 canvas.width = pieceWidth;
                 canvas.height = pieceHeight;
-                const ctx = canvas.getContext('2d');
+
                 ctx.drawImage(
                     img,
-                    col * pieceWidth,
-                    row * pieceHeight,
+                    sx + col * pieceWidth,
+                    sy + row * pieceHeight,
                     pieceWidth,
                     pieceHeight,
                     0,
@@ -101,6 +122,7 @@ function sliceAndInitialize(imageUrl, rows, cols) {
                     pieceWidth,
                     pieceHeight
                 );
+
                 const dataUrl = canvas.toDataURL();
                 correctOrder.push(dataUrl);
                 imagePieces.push(dataUrl);

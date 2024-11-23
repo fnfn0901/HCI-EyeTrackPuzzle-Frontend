@@ -9,22 +9,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search);
     const level = urlParams.get("level");
     const time = urlParams.get("time");
-    const imageIndex = urlParams.get("imageIndex"); // 기본값 설정 제거
+    const imageIndex = urlParams.get("imageIndex");
+    const imagePool = JSON.parse(decodeURIComponent(urlParams.get("imagePool"))); // imagePool 복원
 
     // 결과 화면 업데이트
     resultLevel.textContent = `Level ${level}`;
     resultTimer.textContent = time;
     resultMessage.textContent = urlParams.get("result") === "success" ? "You Win!" : "Game Over";
 
-   // Retry 버튼 동작
+    // Retry 버튼 동작
     retryButton.addEventListener("click", () => {
         if (level) {
-            // imageIndex가 명확히 null 또는 undefined인 경우를 제외하고는 그대로 사용
-            const retryImageIndex = imageIndex !== null && imageIndex !== "null"
-                ? imageIndex // 마지막 사용된 이미지 유지
-                : 0; // 기본값 설정 (원하는 기본값으로 변경 가능)
-
-            console.log(`Retry 경로: ./GameView.html?level=${level}&imageIndex=${retryImageIndex}`);
+            const retryImageIndex = imageIndex !== null && imageIndex !== "null" 
+                ? imageIndex 
+                : Math.floor(Math.random() * imagePool.length);
+            
             window.location.href = `./GameView.html?level=${level}&imageIndex=${retryImageIndex}`;
         } else {
             console.error("레벨 정보가 없습니다!");
@@ -34,17 +33,35 @@ document.addEventListener("DOMContentLoaded", () => {
     // Next Game 버튼 동작
     nextGameButton.addEventListener("click", () => {
         if (level) {
-            const totalImages = 3; // 이미지 개수
-            let newImageIndex = Math.floor(Math.random() * totalImages);
+            const totalImages = imagePool.length;
 
-            // 마지막 이미지 제외 로직
-            while (newImageIndex.toString() === imageIndex) {
-                newImageIndex = Math.floor(Math.random() * totalImages);
+            // sessionStorage에 방문한 이미지 목록 가져오기
+            let viewedImages = JSON.parse(sessionStorage.getItem('viewedImages')) || [];
+
+            // 방문하지 않은 이미지 목록 필터링
+            const unviewedImages = imagePool.filter((_, index) => !viewedImages.includes(index));
+
+            // 모든 이미지를 본 경우, 기록 초기화
+            if (unviewedImages.length === 0) {
+                console.log("모든 이미지를 보았습니다. 기록을 초기화합니다.");
+                sessionStorage.removeItem('viewedImages');
+                viewedImages = [];
+            }
+
+            // 방문하지 않은 이미지에서 랜덤 선택
+            const newImageIndex = unviewedImages.length > 0
+                ? imagePool.indexOf(unviewedImages[Math.floor(Math.random() * unviewedImages.length)])
+                : Math.floor(Math.random() * totalImages);
+
+            // 선택한 이미지를 기록에 추가
+            if (!viewedImages.includes(newImageIndex)) {
+                viewedImages.push(newImageIndex);
+                sessionStorage.setItem('viewedImages', JSON.stringify(viewedImages));
             }
 
             window.location.href = `./GameView.html?level=${level}&imageIndex=${newImageIndex}`;
         } else {
-            console.error("레벨 파라미터가 누락되었습니다.");
+            console.error("레벨 정보가 없습니다!");
         }
     });
 });

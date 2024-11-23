@@ -66,7 +66,6 @@ function startGame(imageIndex, rows, cols) {
         : getRandomImage();
 
     if (!selectedImage) {
-        console.error('선택된 이미지가 없습니다. 게임을 시작할 수 없습니다.');
         hideLoadingSpinner(); // 로딩 스피너 숨김
         return;
     }

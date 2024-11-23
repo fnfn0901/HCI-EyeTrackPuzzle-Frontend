@@ -26,7 +26,8 @@ async function fetchImages() {
 }
 
 window.addEventListener('load', async () => {
-    await fetchImages(); // S3에서 이미지 목록 가져오기
+    // 이미지 목록 가져오기
+    await fetchImages();
 
     if (imagePool.length === 0) {
         console.error('이미지 풀이 비어 있습니다. 게임을 시작할 수 없습니다.');
@@ -52,6 +53,13 @@ window.addEventListener('load', async () => {
         return;
     }
 
+    // 레벨 표시 업데이트
+    document.querySelector('.level-text').textContent = `Level ${level}`;
+
+    // 로딩 스피너 표시
+    showLoadingSpinner();
+
+    // 동적으로 grid-container 구성
     const gridSetup = setupGrid(level, rows, cols);
     if (!gridSetup || gridSetup.puzzleSlotCount === undefined || gridSetup.answerSlotCount === undefined) {
         console.error('setupGrid 함수의 반환값이 유효하지 않습니다.');
@@ -64,7 +72,10 @@ window.addEventListener('load', async () => {
         return;
     }
 
-    startGame(imageIndex, rows, cols);
+    // 퍼즐 게임 시작
+    startGameWithLoading(imageIndex, rows, cols);
+
+    // 스톱워치 시작
     startStopwatch();
 });
 

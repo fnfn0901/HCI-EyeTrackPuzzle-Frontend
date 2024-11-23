@@ -8,9 +8,9 @@ let correctOrder = [];
 let imagePieces = [];
 let selectedPiece = null;
 
-function startGame(imageIndex, rows, cols) {
+function startGame(imageIndex, rows, cols, callback) {
     const selectedImage = imageIndex !== null ? imagePool[imageIndex] : getRandomImage();
-    sliceAndInitialize(selectedImage, rows, cols);
+    sliceAndInitialize(selectedImage, rows, cols, callback);
 }
 
 function getRandomImage() {
@@ -55,14 +55,12 @@ function sliceAndInitialize(imageUrl, rows, cols, callback) {
         initializeGrid(rows, cols);
         setupEventListeners();
 
-        // 로드 완료 후 스피너 숨김
-        hideLoadingSpinner();
+        // 로드 완료 후 콜백 호출
         if (callback) callback();
     };
 
     img.onerror = () => {
         console.error(`이미지 로드 실패: ${imageUrl}`);
-        hideLoadingSpinner(); // 에러 발생 시에도 스피너 숨김
         if (callback) callback();
     };
 }
@@ -73,7 +71,6 @@ function initializeGrid(rows, cols) {
 
     const shuffledOrder = [...imagePieces].sort(() => Math.random() - 0.5);
 
-    // 퍼즐 슬롯에 섞인 조각 배치
     puzzleSlots.forEach((slot, index) => {
         slot.style.backgroundImage = shuffledOrder[index]
             ? `url('${shuffledOrder[index]}')`
@@ -81,7 +78,6 @@ function initializeGrid(rows, cols) {
         slot.setAttribute('data-image', shuffledOrder[index] || '');
     });
 
-    // 답 슬롯에 정답 데이터 설정
     answerSlots.forEach((slot, index) => {
         slot.setAttribute('data-correct', correctOrder[index]);
         slot.removeAttribute('data-image');
@@ -102,7 +98,6 @@ function handleSlotClick(slot) {
             selectedPiece.removeAttribute('data-image');
             selectedPiece.style.outline = '';
             selectedPiece = null;
-
             checkAnswers();
         } else {
             const tempImage = slot.style.backgroundImage;
@@ -126,6 +121,7 @@ function handleSlotClick(slot) {
 
 function checkAnswers() {
     const answerSlots = Array.from(document.querySelectorAll('.answer'));
+
     const isCorrect = answerSlots.every((slot, index) =>
         slot.getAttribute('data-image') === correctOrder[index]
     );
@@ -134,4 +130,11 @@ function checkAnswers() {
         stopStopwatch();
         setTimeout(() => handleResult('success'), 500);
     }
+}
+
+function handleResult(result) {
+    const levelText = document.querySelector('.level-text').textContent.split(' ')[1];
+    const timerText = document.querySelector('.timer-text').textContent;
+
+    window.location.href = `result.html?result=${result}&level=${encodeURIComponent(levelText)}&time=${encodeURIComponent(timerText)}`;
 }

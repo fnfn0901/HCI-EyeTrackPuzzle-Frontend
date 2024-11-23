@@ -21,7 +21,6 @@ window.addEventListener('load', () => {
     // 레벨 표시 업데이트
     document.querySelector('.level-text').textContent = `Level ${level}`;
 
-
     // 로딩 스피너 표시
     showLoadingSpinner();
 
@@ -29,7 +28,7 @@ window.addEventListener('load', () => {
     setupGrid(level, rows, cols);
 
     // 퍼즐 게임 시작
-    startGame(imageIndex, rows, cols);
+    startGameWithLoading(imageIndex, rows, cols);
 
     // 스톱워치 시작
     startStopwatch();
@@ -50,7 +49,6 @@ function hideLoadingSpinner() {
 }
 
 function startGameWithLoading(imageIndex, rows, cols) {
-    // 이미지가 로드된 이후 스피너를 숨기도록 콜백 연결
     startGame(imageIndex, rows, cols, () => {
         hideLoadingSpinner();
     });
@@ -61,7 +59,6 @@ function setupGrid(level, rows, cols) {
     gridContainer.innerHTML = ''; // 기존 그리드 초기화
     gridContainer.className = `grid-container level-${level}`; // 레벨에 맞는 클래스 추가
 
-    // 레벨별 레이아웃 정의
     const layout = level === '1'
         ? [
             ['back', '', '', 'pause'],
@@ -120,4 +117,25 @@ function createGridItems(container, layout) {
             container.appendChild(gridItem);
         });
     });
+}
+
+function goBack() {
+    stopStopwatch();
+    window.location.href = 'menu.html'; // 메인 메뉴로 이동
+}
+
+function togglePause() {
+    const overlay = document.getElementById('overlay');
+    const alertBox = document.getElementById('alert-box');
+    const isPaused = overlay.style.display === 'block';
+
+    if (isPaused) {
+        overlay.style.display = 'none';
+        alertBox.style.display = 'none';
+        startStopwatch();
+    } else {
+        overlay.style.display = 'block';
+        alertBox.style.display = 'flex';
+        stopStopwatch();
+    }
 }

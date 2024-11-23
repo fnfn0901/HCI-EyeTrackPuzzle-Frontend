@@ -33,13 +33,15 @@ function showAlert(type) {
         alertTitle.textContent = '게임을 종료하시겠습니까?';
         continueButton.textContent = '게임 종료';
         menuButton.textContent = '취소';
-        menuButton.onclick = resumeGame; // 게임 재개
 
         continueButton.onclick = () => {
             resetAlertState();
             window.location.href = 'level.html'; // 메인 메뉴로 이동
         };
-        menuButton.onclick = resetAlertState; // Alert 닫기
+        menuButton.onclick = () => {
+            resetAlertState(); // Alert 닫기
+            resumeGame(); // 타이머 재개
+        };
     } else if (type === 'pause') {
         stopStopwatch();
         alertTitle.textContent = '게임이 일시정지되었습니다.';

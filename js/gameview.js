@@ -38,6 +38,8 @@ function showLoadingSpinner() {
     const spinner = document.getElementById('loading-spinner');
     if (spinner) {
         spinner.style.display = 'block';
+    } else {
+        console.error('로딩 스피너 엘리먼트가 존재하지 않습니다.');
     }
 }
 
@@ -45,6 +47,8 @@ function hideLoadingSpinner() {
     const spinner = document.getElementById('loading-spinner');
     if (spinner && spinner.style.display !== 'none') {
         spinner.style.display = 'none';
+    } else {
+        console.error('로딩 스피너 엘리먼트가 존재하지 않습니다.');
     }
 }
 
@@ -107,6 +111,11 @@ function sliceAndInitialize(imageUrl, rows, cols) {
     };
 }
 
+function setupEventListeners() {
+    const slots = document.querySelectorAll('.puzzle-slot, .answer');
+    slots.forEach(slot => slot.addEventListener('click', () => handleSlotClick(slot)));
+}
+
 function initializeGrid(rows, cols) {
     const puzzleSlots = Array.from(document.querySelectorAll('.puzzle-slot'));
     const answerSlots = Array.from(document.querySelectorAll('.answer'));
@@ -115,16 +124,23 @@ function initializeGrid(rows, cols) {
 
     // 퍼즐 슬롯에 섞인 조각 배치
     puzzleSlots.forEach((slot, index) => {
-        slot.style.backgroundImage = shuffledOrder[index]
-            ? `url('${shuffledOrder[index]}')`
-            : '';
-        slot.setAttribute('data-image', shuffledOrder[index] || '');
+        if (shuffledOrder[index]) {
+            slot.style.backgroundImage = `url('${shuffledOrder[index]}')`;
+            slot.style.backgroundSize = 'cover';
+            slot.setAttribute('data-image', shuffledOrder[index]);
+        } else {
+            slot.style.backgroundImage = '';
+            slot.removeAttribute('data-image');
+        }
     });
 
-    // 답 슬롯에 정답 데이터 설정
+    // 정답 슬롯 설정
     answerSlots.forEach((slot, index) => {
-        slot.setAttribute('data-correct', correctOrder[index]);
-        slot.removeAttribute('data-image');
+        if (correctOrder[index]) {
+            slot.setAttribute('data-correct', correctOrder[index]);
+            slot.style.backgroundImage = '';
+            slot.removeAttribute('data-image');
+        }
     });
 }
 

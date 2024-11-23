@@ -16,14 +16,13 @@ document.addEventListener("DOMContentLoaded", () => {
     resultTimer.textContent = time;
     resultMessage.textContent = urlParams.get("result") === "success" ? "You Win!" : "Game Over";
 
-    // Retry 버튼 동작
+   // Retry 버튼 동작
     retryButton.addEventListener("click", () => {
         if (level) {
-            console.log(`Retry 경로 생성 중: level=${level}, imageIndex=${imageIndex}`);
-            
-            const retryImageIndex = imageIndex !== null && imageIndex !== "null" 
-                ? imageIndex 
-                : Math.floor(Math.random() * 3); // 기본값을 랜덤으로 설정 가능
+            // imageIndex가 명확히 null 또는 undefined인 경우를 제외하고는 그대로 사용
+            const retryImageIndex = imageIndex !== null && imageIndex !== "null"
+                ? imageIndex // 마지막 사용된 이미지 유지
+                : 0; // 기본값 설정 (원하는 기본값으로 변경 가능)
 
             console.log(`Retry 경로: ./GameView.html?level=${level}&imageIndex=${retryImageIndex}`);
             window.location.href = `./GameView.html?level=${level}&imageIndex=${retryImageIndex}`;

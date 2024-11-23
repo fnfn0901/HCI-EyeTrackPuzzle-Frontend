@@ -33,6 +33,7 @@ function showAlert(type) {
         alertTitle.textContent = '게임을 종료하시겠습니까?';
         continueButton.textContent = '게임 종료';
         menuButton.textContent = '취소';
+        menuButton.onclick = resumeGame; // 게임 재개
 
         continueButton.onclick = () => {
             resetAlertState();

@@ -8,14 +8,22 @@ let correctOrder = [];
 let imagePieces = [];
 let selectedPiece = null;
 
-function startGame(imageIndex, rows, cols, callback) {
-    const selectedImage = imageIndex !== null ? imagePool[imageIndex] : getRandomImage();
-    sliceAndInitialize(selectedImage, rows, cols, callback);
-}
-
 function getRandomImage() {
+    if (imagePool.length === 0) {
+        console.error('이미지 풀이 비어 있습니다.');
+        return null;
+    }
     const randomIndex = Math.floor(Math.random() * imagePool.length);
     return imagePool[randomIndex];
+}
+
+function startGame(imageIndex, rows, cols, callback) {
+    const selectedImage = imageIndex !== null ? imagePool[imageIndex] : getRandomImage();
+    if (!selectedImage) {
+        console.error('선택된 이미지가 없습니다!');
+        return;
+    }
+    sliceAndInitialize(selectedImage, rows, cols, callback);
 }
 
 function sliceAndInitialize(imageUrl, rows, cols, callback) {

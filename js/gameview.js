@@ -1,4 +1,18 @@
-window.addEventListener('load', () => {
+const imagePool = [];
+
+// S3 이미지 목록 가져오기
+async function fetchImages() {
+    try {
+        const response = await fetch('/api/images');
+        const images = await response.json();
+        imagePool.push(...images);
+    } catch (error) {
+        console.error('이미지 목록을 가져오는 중 오류 발생:', error);
+    }
+}
+
+window.addEventListener('load', async () => {
+    await fetchImages(); // 이미지 목록 가져오기
     const urlParams = new URLSearchParams(window.location.search);
     const level = urlParams.get('level');
     const imageIndex = urlParams.has('imageIndex') && urlParams.get('imageIndex') !== 'null'

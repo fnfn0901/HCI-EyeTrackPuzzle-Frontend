@@ -1,22 +1,25 @@
-let isBackAlertActive = false;
-let isPauseAlertActive = false;
+let isAlertActive = false; // 상태 관리 통합
 
-function goBack() {
-    if (isPauseAlertActive || isBackAlertActive) return;
-    setAlertState('back');
+// 뒤로가기 버튼 핸들러
+function goBack(event) {
+    if (isAlertActive) return;
+    if (event) event.preventDefault(); // 기본 뒤로가기 동작 방지
+    showAlert('back'); // 뒤로가기 Alert 호출
 }
 
+// 일시정지 버튼 핸들러
 function togglePause() {
-    if (isBackAlertActive) return;
+    if (isAlertActive) return;
 
     if (running) {
-        setAlertState('pause');
-    } else if (isPauseAlertActive) {
-        resumeGame();
+        showAlert('pause'); // 일시정지 Alert 호출
+    } else {
+        resumeGame(); // 게임 재개
     }
 }
 
-function setAlertState(type) {
+// Alert 창 표시
+function showAlert(type) {
     resetAlertState();
 
     const overlay = document.getElementById('overlay');
@@ -31,39 +34,37 @@ function setAlertState(type) {
         continueButton.textContent = '게임 종료';
         menuButton.textContent = '취소';
 
-        continueButton.onclick = () => window.location.href = 'index.html';
-        menuButton.onclick = () => {
+        continueButton.onclick = () => {
             resetAlertState();
-            resumeGame();
+            window.location.href = 'level.html'; // 메인 메뉴로 이동
         };
-
-        isBackAlertActive = true;
+        menuButton.onclick = resetAlertState; // Alert 닫기
     } else if (type === 'pause') {
         stopStopwatch();
         alertTitle.textContent = '게임이 일시정지되었습니다.';
         continueButton.textContent = '게임 계속';
         menuButton.textContent = '메인 메뉴';
 
-        continueButton.onclick = () => {
-            resetAlertState();
-            resumeGame();
-        };
-        menuButton.onclick = () => window.location.href = 'index.html';
-
-        isPauseAlertActive = true;
+        continueButton.onclick = resumeGame; // 게임 재개
+        menuButton.onclick = () => window.location.href = 'level.html'; // 메인 메뉴로 이동
     }
 
     overlay.style.display = 'block';
     alertBox.style.display = 'flex';
+    isAlertActive = true;
 }
 
+// Alert 상태 초기화
 function resetAlertState() {
-    document.getElementById('overlay').style.display = 'none';
-    document.getElementById('alert-box').style.display = 'none';
-    isBackAlertActive = false;
-    isPauseAlertActive = false;
+    const overlay = document.getElementById('overlay');
+    const alertBox = document.getElementById('alert-box');
+
+    overlay.style.display = 'none';
+    alertBox.style.display = 'none';
+    isAlertActive = false;
 }
 
+// 게임 재개
 function resumeGame() {
     startTime = new Date().getTime() - difference;
     running = true;

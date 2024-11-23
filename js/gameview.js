@@ -175,6 +175,21 @@ function initializeGrid(rows, cols) {
     });
 }
 
+function checkAnswers() {
+    const answerSlots = Array.from(document.querySelectorAll('.answer'));
+
+    const isCorrect = answerSlots.every((slot, index) =>
+        slot.getAttribute('data-image') === correctOrder[index]
+    );
+
+    if (isCorrect) {
+        stopStopwatch();
+        setTimeout(() => {
+            handleResult('success');
+        }, 500);
+    }
+}
+
 function getRandomImage() {
     if (imagePool.length === 0) {
         console.error('이미지 풀이 비어 있습니다. 랜덤 이미지를 선택할 수 없습니다.');

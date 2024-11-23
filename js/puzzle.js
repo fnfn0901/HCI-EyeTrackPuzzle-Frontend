@@ -8,13 +8,17 @@ let correctOrder = [];
 let imagePieces = [];
 let selectedPiece = null;
 
-function startGameWithRandomImage(rows, cols) {
-    const randomIndex = Math.floor(Math.random() * imagePool.length);
-    const selectedImage = imagePool[randomIndex];
-    sliceImage(selectedImage, rows, cols);
+function startGame(imageIndex, rows, cols) {
+    const selectedImage = imageIndex !== null ? imagePool[imageIndex] : getRandomImage();
+    sliceAndInitialize(selectedImage, rows, cols);
 }
 
-function sliceImage(imageUrl, rows, cols) {
+function getRandomImage() {
+    const randomIndex = Math.floor(Math.random() * imagePool.length);
+    return imagePool[randomIndex];
+}
+
+function sliceAndInitialize(imageUrl, rows, cols, callback) {
     const img = new Image();
     img.src = imageUrl;
 
@@ -47,47 +51,51 @@ function sliceImage(imageUrl, rows, cols) {
                 imagePieces.push(dataUrl);
             }
         }
-        initializeGame(rows, cols);
+
+        initializeGrid(rows, cols);
+        setupEventListeners();
+
+        // 로드 완료 후 스피너 숨김
+        hideLoadingSpinner();
+        if (callback) callback();
+    };
+
+    img.onerror = () => {
+        console.error(`이미지 로드 실패: ${imageUrl}`);
+        hideLoadingSpinner(); // 에러 발생 시에도 스피너 숨김
+        if (callback) callback();
     };
 }
 
-function initializeGame(rows, cols) {
-    const totalPieces = rows * cols;
+function initializeGrid(rows, cols) {
     const puzzleSlots = Array.from(document.querySelectorAll('.puzzle-slot'));
     const answerSlots = Array.from(document.querySelectorAll('.answer'));
-    const totalSlots = puzzleSlots.length;
-
-    if (totalSlots !== totalPieces) {
-        console.error(`그리드(${totalSlots})와 퍼즐 조각(${totalPieces})의 수가 일치하지 않습니다!`);
-        return;
-    }
 
     const shuffledOrder = [...imagePieces].sort(() => Math.random() - 0.5);
 
     // 퍼즐 슬롯에 섞인 조각 배치
     puzzleSlots.forEach((slot, index) => {
-        if (shuffledOrder[index]) {
-            slot.style.backgroundImage = `url('${shuffledOrder[index]}')`;
-            slot.setAttribute('data-image', shuffledOrder[index]);
-        }
+        slot.style.backgroundImage = shuffledOrder[index]
+            ? `url('${shuffledOrder[index]}')`
+            : '';
+        slot.setAttribute('data-image', shuffledOrder[index] || '');
     });
 
     // 답 슬롯에 정답 데이터 설정
     answerSlots.forEach((slot, index) => {
         slot.setAttribute('data-correct', correctOrder[index]);
-        slot.removeAttribute('data-image'); // 초기 상태에서는 이미지 없음
+        slot.removeAttribute('data-image');
     });
+}
 
-    // 이벤트 리스너 등록
-    [...puzzleSlots, ...answerSlots].forEach(slot => {
-        slot.addEventListener('click', () => handleSlotClick(slot));
-    });
+function setupEventListeners() {
+    const slots = document.querySelectorAll('.puzzle-slot, .answer');
+    slots.forEach(slot => slot.addEventListener('click', () => handleSlotClick(slot)));
 }
 
 function handleSlotClick(slot) {
     if (selectedPiece) {
         if (!slot.getAttribute('data-image')) {
-            // 빈 슬롯으로 이동
             slot.style.backgroundImage = selectedPiece.style.backgroundImage;
             slot.setAttribute('data-image', selectedPiece.getAttribute('data-image'));
             selectedPiece.style.backgroundImage = '';
@@ -95,9 +103,8 @@ function handleSlotClick(slot) {
             selectedPiece.style.outline = '';
             selectedPiece = null;
 
-            checkAnswers(); // 정답 체크
+            checkAnswers();
         } else {
-            // 슬롯 간 교환
             const tempImage = slot.style.backgroundImage;
             const tempData = slot.getAttribute('data-image');
 
@@ -111,10 +118,7 @@ function handleSlotClick(slot) {
             selectedPiece = null;
         }
     } else if (slot.getAttribute('data-image')) {
-        // 조각 선택
-        if (selectedPiece) {
-            selectedPiece.style.outline = '';
-        }
+        if (selectedPiece) selectedPiece.style.outline = '';
         selectedPiece = slot;
         selectedPiece.style.outline = '4px solid #FF8181';
     }
@@ -122,21 +126,12 @@ function handleSlotClick(slot) {
 
 function checkAnswers() {
     const answerSlots = Array.from(document.querySelectorAll('.answer'));
-
     const isCorrect = answerSlots.every((slot, index) =>
         slot.getAttribute('data-image') === correctOrder[index]
     );
 
     if (isCorrect) {
         stopStopwatch();
-        setTimeout(() => {
-            handleResult('success');
-        }, 500);
+        setTimeout(() => handleResult('success'), 500);
     }
-}
-
-function handleResult(result) {
-    const levelText = document.querySelector('.level-text').textContent;
-    const timerText = document.querySelector('.timer-text').textContent;
-    window.location.href = `result.html?result=${result}&level=${encodeURIComponent(levelText)}&time=${encodeURIComponent(timerText)}`;
 }

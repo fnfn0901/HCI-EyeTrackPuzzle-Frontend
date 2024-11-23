@@ -1,3 +1,5 @@
+let selectedPiece = null;
+
 window.addEventListener('load', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const level = urlParams.get('level');
@@ -299,20 +301,5 @@ function togglePause() {
         overlay.style.display = 'block';
         alertBox.style.display = 'flex';
         stopStopwatch();
-    }
-}
-
-function checkAnswers() {
-    const answerSlots = Array.from(document.querySelectorAll('.answer'));
-
-    const isCorrect = answerSlots.every((slot, index) =>
-        slot.getAttribute('data-image') === correctOrder[index]
-    );
-
-    if (isCorrect) {
-        stopStopwatch();
-        setTimeout(() => {
-            handleResult('success');
-        }, 500);
     }
 }

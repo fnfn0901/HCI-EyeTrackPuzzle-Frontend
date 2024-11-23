@@ -98,13 +98,34 @@ function sliceAndInitialize(imageUrl, rows, cols) {
             }
         }
 
-        initializeGrid(rows, cols); // 게임 그리드 초기화
+        initializeGrid(rows, cols); // 새로 정의한 initializeGrid 함수 호출
         setupEventListeners(); // 이벤트 리스너 설정
     };
 
     img.onerror = () => {
         console.error(`이미지 로드 실패: ${imageUrl}`);
     };
+}
+
+function initializeGrid(rows, cols) {
+    const puzzleSlots = Array.from(document.querySelectorAll('.puzzle-slot'));
+    const answerSlots = Array.from(document.querySelectorAll('.answer'));
+
+    const shuffledOrder = [...imagePieces].sort(() => Math.random() - 0.5);
+
+    // 퍼즐 슬롯에 섞인 조각 배치
+    puzzleSlots.forEach((slot, index) => {
+        slot.style.backgroundImage = shuffledOrder[index]
+            ? `url('${shuffledOrder[index]}')`
+            : '';
+        slot.setAttribute('data-image', shuffledOrder[index] || '');
+    });
+
+    // 답 슬롯에 정답 데이터 설정
+    answerSlots.forEach((slot, index) => {
+        slot.setAttribute('data-correct', correctOrder[index]);
+        slot.removeAttribute('data-image');
+    });
 }
 
 function getRandomImage() {

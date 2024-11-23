@@ -286,3 +286,18 @@ function togglePause() {
         stopStopwatch();
     }
 }
+
+function checkAnswers() {
+    const answerSlots = Array.from(document.querySelectorAll('.answer'));
+
+    const isCorrect = answerSlots.every((slot, index) =>
+        slot.getAttribute('data-image') === correctOrder[index]
+    );
+
+    if (isCorrect) {
+        stopStopwatch();
+        setTimeout(() => {
+            handleResult('success');
+        }, 500);
+    }
+}

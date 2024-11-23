@@ -40,7 +40,7 @@ window.addEventListener('load', async () => {
     showLoadingSpinner();
 
     // 동적으로 grid-container 구성
-    const { puzzleSlotCount, answerSlotCount } = setupGrid(level, rows, cols);
+    const { puzzleSlotCount, answerSlotCount } = setupGrid(level, rows, cols); // 중복된 layout 제거 후 호출
 
     // 퍼즐 슬롯과 정답 슬롯이 일치하지 않으면 중단
     if (puzzleSlotCount !== answerSlotCount) {

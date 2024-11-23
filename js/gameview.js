@@ -1,18 +1,4 @@
-const imagePool = [];
-
-// S3 이미지 목록 가져오기
-async function fetchImages() {
-    try {
-        const response = await fetch('/api/images');
-        const images = await response.json();
-        imagePool.push(...images);
-    } catch (error) {
-        console.error('이미지 목록을 가져오는 중 오류 발생:', error);
-    }
-}
-
 window.addEventListener('load', async () => {
-    await fetchImages(); // 이미지 목록 가져오기
     const urlParams = new URLSearchParams(window.location.search);
     const level = urlParams.get('level');
     const imageIndex = urlParams.has('imageIndex') && urlParams.get('imageIndex') !== 'null'
@@ -39,7 +25,7 @@ window.addEventListener('load', async () => {
     showLoadingSpinner();
 
     // 동적으로 grid-container 구성
-    setupGrid(level, rows, cols);
+    setupGrid(level, rows, cols); // 중복된 layout 제거 후 호출
 
     // 퍼즐 게임 시작
     startGameWithLoading(imageIndex, rows, cols);
@@ -73,29 +59,38 @@ function setupGrid(level, rows, cols) {
     gridContainer.innerHTML = ''; // 기존 그리드 초기화
     gridContainer.className = `grid-container level-${level}`; // 레벨에 맞는 클래스 추가
 
-    const layout = level === '1'
-        ? [
-            ['back', '', '', 'pause'],
-            ['puzzle-slot', 'answer', 'answer', 'puzzle-slot'],
-            ['puzzle-slot', 'answer', 'answer', 'puzzle-slot'],
-        ]
-        : level === '2'
-        ? [
-            ['back', 'puzzle-slot', 'puzzle-slot', 'puzzle-slot', 'pause'],
-            ['puzzle-slot', 'answer', 'answer', 'answer', 'puzzle-slot'],
-            ['puzzle-slot', 'answer', 'answer', 'answer', 'puzzle-slot'],
-            ['puzzle-slot', 'answer', 'answer', 'answer', 'puzzle-slot'],
-        ]
-        : [
-            ['back', 'puzzle-slot', 'puzzle-slot', 'puzzle-slot', 'puzzle-slot', 'pause'],
-            ['puzzle-slot', 'answer', 'answer', 'answer', 'answer', 'puzzle-slot'],
-            ['puzzle-slot', 'answer', 'answer', 'answer', 'answer', 'puzzle-slot'],
-            ['puzzle-slot', 'answer', 'answer', 'answer', 'answer', 'puzzle-slot'],
-            ['puzzle-slot', 'answer', 'answer', 'answer', 'answer', 'puzzle-slot'],
-            ['', 'puzzle-slot', 'puzzle-slot', 'puzzle-slot', 'puzzle-slot', ''],
-        ];
+    const layout = getLayoutForLevel(level); // 레이아웃 가져오기
 
-    createGridItems(gridContainer, layout);
+    layout.forEach(row => {
+        row.forEach(item => {
+            const gridItem = document.createElement('div');
+            if (item === '') {
+                gridItem.className = 'grid-item empty-slot';
+            } else {
+                gridItem.className = 'grid-item';
+                if (item === 'back') {
+                    const backImg = document.createElement('img');
+                    backImg.src = 'images/Back.svg';
+                    backImg.alt = 'Back';
+                    backImg.onclick = () => goBack();
+                    gridItem.appendChild(backImg);
+                    gridItem.classList.add('back-button');
+                } else if (item === 'pause') {
+                    const pauseImg = document.createElement('img');
+                    pauseImg.src = 'images/Pause.svg';
+                    pauseImg.alt = 'Pause';
+                    pauseImg.onclick = () => togglePause();
+                    gridItem.appendChild(pauseImg);
+                    gridItem.classList.add('pause-button');
+                } else if (item === 'puzzle-slot') {
+                    gridItem.classList.add('puzzle-slot');
+                } else if (item === 'answer') {
+                    gridItem.classList.add('answer');
+                }
+            }
+            gridContainer.appendChild(gridItem);
+        });
+    });
 }
 
 function createGridItems(container, layout) {

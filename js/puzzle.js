@@ -3,7 +3,7 @@ const imagePool = [];
 // S3 이미지 목록 가져오기
 async function fetchImages() {
     try {
-        const response = await fetch('/api/images');
+        const response = await fetch('../images/puzzles');
         const images = await response.json();
         imagePool.push(...images);
     } catch (error) {

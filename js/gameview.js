@@ -59,6 +59,15 @@ function startGame(imageIndex, rows, cols) {
     sliceAndInitialize(selectedImage, rows, cols);
 }
 
+function getRandomImage() {
+    if (imagePool.length === 0) {
+        console.error('이미지 풀이 비어 있습니다.');
+        return null;
+    }
+    const randomIndex = Math.floor(Math.random() * imagePool.length);
+    return imagePool[randomIndex];
+}
+
 function setupGrid(level, rows, cols) {
     const gridContainer = document.querySelector('.grid-container');
     gridContainer.innerHTML = ''; // 기존 그리드 초기화

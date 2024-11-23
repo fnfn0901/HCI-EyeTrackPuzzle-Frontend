@@ -54,6 +54,11 @@ function startGameWithLoading(imageIndex, rows, cols) {
     });
 }
 
+function startGame(imageIndex, rows, cols) {
+    const selectedImage = imageIndex !== null ? imagePool[imageIndex] : getRandomImage();
+    sliceAndInitialize(selectedImage, rows, cols);
+}
+
 function setupGrid(level, rows, cols) {
     const gridContainer = document.querySelector('.grid-container');
     gridContainer.innerHTML = ''; // 기존 그리드 초기화

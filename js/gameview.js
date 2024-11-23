@@ -56,10 +56,14 @@ function startGameWithLoading(imageIndex, rows, cols) {
 
 function startGame(imageIndex, rows, cols) {
     const selectedImage = imageIndex !== null ? imagePool[imageIndex] : getRandomImage();
+    if (!selectedImage) {
+        console.error('선택된 이미지가 없습니다. 게임을 시작할 수 없습니다.');
+        return;
+    }
     sliceAndInitialize(selectedImage, rows, cols);
 }
 
-function sliceAndInitialize(imageUrl, rows, cols, callback) {
+function sliceAndInitialize(imageUrl, rows, cols) {
     const img = new Image();
     img.src = imageUrl;
 
@@ -93,22 +97,18 @@ function sliceAndInitialize(imageUrl, rows, cols, callback) {
             }
         }
 
-        initializeGrid(rows, cols);
-        setupEventListeners();
-
-        // 로드 완료 후 콜백 호출
-        if (callback) callback();
+        initializeGrid(rows, cols); // 게임 그리드 초기화
+        setupEventListeners(); // 이벤트 리스너 설정
     };
 
     img.onerror = () => {
         console.error(`이미지 로드 실패: ${imageUrl}`);
-        if (callback) callback();
     };
 }
 
 function getRandomImage() {
     if (imagePool.length === 0) {
-        console.error('이미지 풀이 비어 있습니다.');
+        console.error('이미지 풀이 비어 있습니다. 랜덤 이미지를 선택할 수 없습니다.');
         return null;
     }
     const randomIndex = Math.floor(Math.random() * imagePool.length);
@@ -122,6 +122,9 @@ function setupGrid(level, rows, cols) {
 
     const layout = getLayoutForLevel(level); // 레이아웃 가져오기
 
+    let puzzleSlotCount = 0;
+    let answerSlotCount = 0;
+
     layout.forEach(row => {
         row.forEach(item => {
             const gridItem = document.createElement('div');
@@ -133,25 +136,30 @@ function setupGrid(level, rows, cols) {
                     const backImg = document.createElement('img');
                     backImg.src = 'images/Back.svg';
                     backImg.alt = 'Back';
-                    backImg.onclick = () => goBack();
+                    backImg.onclick = goBack;
                     gridItem.appendChild(backImg);
                     gridItem.classList.add('back-button');
                 } else if (item === 'pause') {
                     const pauseImg = document.createElement('img');
                     pauseImg.src = 'images/Pause.svg';
                     pauseImg.alt = 'Pause';
-                    pauseImg.onclick = () => togglePause();
+                    pauseImg.onclick = togglePause;
                     gridItem.appendChild(pauseImg);
                     gridItem.classList.add('pause-button');
                 } else if (item === 'puzzle-slot') {
                     gridItem.classList.add('puzzle-slot');
+                    puzzleSlotCount++;
                 } else if (item === 'answer') {
                     gridItem.classList.add('answer');
+                    answerSlotCount++;
                 }
             }
             gridContainer.appendChild(gridItem);
         });
     });
+
+    console.log("Grid 슬롯 상태:", { puzzleSlotCount, answerSlotCount }); // 디버깅용
+    return { puzzleSlotCount, answerSlotCount }; // 항상 반환
 }
 
 function createGridItems(container, layout) {

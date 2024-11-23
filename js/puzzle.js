@@ -1,33 +1,40 @@
-const imagePool = [];
+const imagePool = []; // 이미지 URL을 저장하는 전역 배열
 
-// S3 이미지 목록 가져오기
 async function fetchImages() {
     try {
+        // S3 REST API 호출
         const response = await fetch('https://focuspuzzles3bucket.s3.ap-northeast-2.amazonaws.com/?list-type=2&prefix=images/puzzles/');
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
+
+        // XML 응답 텍스트를 가져옴
         const xmlText = await response.text();
+        console.log("받은 XML 응답:", xmlText); // 디버깅용
+
+        // XML 파싱
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlText, "text/xml");
 
+        // XML에서 <Key> 태그 값을 추출하여 이미지 URL을 생성
         const keys = Array.from(xmlDoc.getElementsByTagName("Key")).map(node => node.textContent);
-        console.log("받은 이미지 키 목록:", keys);
-
         const baseUrl = 'https://focuspuzzles3bucket.s3.ap-northeast-2.amazonaws.com/';
         imagePool.push(...keys.map(key => baseUrl + key));
+
+        console.log("생성된 이미지 URL 목록:", imagePool); // 디버깅용
     } catch (error) {
         console.error('이미지 목록을 가져오는 중 오류 발생:', error);
     }
 }
+
 window.addEventListener('load', async () => {
-    await fetchImages(); // 이미지 목록 가져오기
+    await fetchImages(); // S3에서 이미지 가져오기
 
     const urlParams = new URLSearchParams(window.location.search);
     const level = urlParams.get('level');
-    const imageIndex = urlParams.get('imageIndex') !== null && urlParams.get('imageIndex') !== "null" 
-        ? parseInt(urlParams.get('imageIndex')) 
-        : Math.floor(Math.random() * imagePool.length); // 랜덤 기본값
+    const imageIndex = urlParams.has('imageIndex') && urlParams.get('imageIndex') !== 'null'
+        ? parseInt(urlParams.get('imageIndex'), 10)
+        : null;
 
     if (!level) {
         console.error("레벨 정보가 없습니다!");
@@ -42,23 +49,21 @@ window.addEventListener('load', async () => {
         return;
     }
 
-    // 레벨 표시 업데이트
-    document.querySelector('.level-text').textContent = `Level ${level}`;
+    // Grid 초기화
+    const gridSetup = setupGrid(level, rows, cols);
+    if (!gridSetup || gridSetup.puzzleSlotCount === undefined || gridSetup.answerSlotCount === undefined) {
+        console.error('setupGrid 함수의 반환값이 유효하지 않습니다.');
+        return;
+    }
+    const { puzzleSlotCount, answerSlotCount } = gridSetup;
 
-    // 로딩 스피너 표시
-    showLoadingSpinner();
-
-    // 동적으로 grid-container 구성
-    const { puzzleSlotCount, answerSlotCount } = setupGrid(level, rows, cols); // 중복된 layout 제거 후 호출
-
-    // 퍼즐 슬롯과 정답 슬롯이 일치하지 않으면 중단
     if (puzzleSlotCount !== answerSlotCount) {
-        console.error("퍼즐 슬롯과 정답 슬롯의 개수가 일치하지 않습니다!");
+        console.error('퍼즐 슬롯과 정답 슬롯의 개수가 일치하지 않습니다!');
         return;
     }
 
-    // 선택된 이미지로 게임 시작
-    startGameWithSelectedImage(imageIndex, rows, cols);
+    // 게임 시작
+    startGame(imageIndex, rows, cols);
 
     // 스톱워치 시작
     startStopwatch();

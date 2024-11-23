@@ -171,18 +171,6 @@ function getLayoutForLevel(level) {
     return [];
 }
 
-function goBack(event) {
-    if (isAlertActive) return;
-    if (event) event.preventDefault();
-    showAlert('back');
-}
-
-function togglePause() {
-    if (isAlertActive) return;
-    if (event) event.preventDefault();
-    showAlert('pause');
-}
-
 function handleResult(result) {
     const levelText = document.querySelector('.level-text').textContent.split(' ')[1];
     const timerText = document.querySelector('.timer-text').textContent;

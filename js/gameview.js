@@ -282,24 +282,3 @@ function createGridItems(container, layout) {
         });
     });
 }
-
-function goBack() {
-    stopStopwatch();
-    window.location.href = 'level.html'; // 메인 메뉴로 이동
-}
-
-function togglePause() {
-    const overlay = document.getElementById('overlay');
-    const alertBox = document.getElementById('alert-box');
-    const isPaused = overlay.style.display === 'block';
-
-    if (isPaused) {
-        overlay.style.display = 'none';
-        alertBox.style.display = 'none';
-        startStopwatch();
-    } else {
-        overlay.style.display = 'block';
-        alertBox.style.display = 'flex';
-        stopStopwatch();
-    }
-}

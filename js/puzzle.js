@@ -27,11 +27,6 @@ window.addEventListener('load', async () => {
     // 이미지 목록 가져오기
     await fetchImages();
 
-    if (imagePool.length === 0) {
-        console.error('이미지 풀이 비어 있습니다. 게임을 시작할 수 없습니다.');
-        return;
-    }
-
     const urlParams = new URLSearchParams(window.location.search);
     const level = urlParams.get('level');
     const imageIndex = urlParams.has('imageIndex') && urlParams.get('imageIndex') !== 'null'

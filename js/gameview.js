@@ -202,10 +202,6 @@ function checkAnswers() {
 }
 
 function getRandomImage() {
-    if (imagePool.length === 0) {
-        console.error('이미지 풀이 비어 있습니다. 랜덤 이미지를 선택할 수 없습니다.');
-        return null;
-    }
     const randomIndex = Math.floor(Math.random() * imagePool.length);
     return imagePool[randomIndex];
 }

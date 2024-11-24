@@ -8,6 +8,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    cursor: url("../images/custom-cursor.png") 10 10, auto;
 }
 
 body {
@@ -75,9 +76,12 @@ body {
     height: 60px;
     top: 386px;
     position: relative;
+    cursor: url("../images/custom-cursor.png") 10 10, auto;
 }
 
 /* 버튼 hover 효과 */
 .result-button:hover {
     background-color: #357ABD;
+
+    cursor: url("../images/custom-cursor.png") 10 10, auto;
 }

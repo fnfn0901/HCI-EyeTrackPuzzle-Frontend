@@ -1,3 +1,7 @@
+*{
+    cursor: url("../images/custom-cursor.png") 10 10, auto;
+}
+
 @font-face {
     font-family: "Helvetica Neue";
     src: url("../fonts/HelveticaNeueRegular.otf") format("opentype");
@@ -52,8 +56,10 @@ body {
     letter-spacing: -0.408px; 
     border: none; 
     cursor: pointer; 
+    cursor: url("../images/custom-cursor.png") 10 10, auto;
 }
 
 .game-button:hover, .help-button:hover {
     background-color: #357ABD;
+    cursor: url("../images/custom-cursor.png") 10 10, auto;
 }

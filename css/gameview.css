@@ -1,4 +1,7 @@
-/* 초기 상태에서 alert-box와 overlay 숨기기 */
+* {
+    cursor: url("../images/custom-cursor.png") 10 10, auto;
+}
+
 #overlay {
     display: none;
 }

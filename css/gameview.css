@@ -71,6 +71,7 @@
     width: 40px;
     height: 40px;
     cursor: pointer;
+    cursor: url("../images/custom-cursor.png") 10 10, auto;
 }
 
 .back-button,

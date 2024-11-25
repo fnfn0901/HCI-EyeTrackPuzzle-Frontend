@@ -165,6 +165,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    cursor: url("../images/custom-cursor.png") 10 10, auto;
 }
 
 .continue-button {

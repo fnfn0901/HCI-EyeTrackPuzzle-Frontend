@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const retryButton = document.getElementById("retryButton");
+    const finishButton = document.getElementById("finishButton");
     const nextGameButton = document.getElementById("nextGameButton");
     const resultMessage = document.getElementById("resultMessage");
     const resultLevel = document.getElementById("resultLevel");
@@ -17,19 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
     resultTimer.textContent = time;
     resultMessage.textContent = urlParams.get("result") === "success" ? "You Win!" : "Game Over";
 
-    // Retry 버튼 동작
-    retryButton.addEventListener("click", () => {
-        if (level) {
-            // imageIndex가 유효하면 그대로 사용
-            const retryImageIndex = imageIndex !== null && imageIndex !== "null" 
-                ? imageIndex 
-                : Math.floor(Math.random() * imagePool.length); // 이미지가 없는 경우 랜덤 선택
-
-            // GameView로 이동
-            window.location.href = `./GameView.html?level=${level}&imageIndex=${retryImageIndex}`;
-        } else {
-            console.error("레벨 정보가 없습니다!");
-        }
+    // Finish 버튼 동작
+    finishButton.addEventListener("click", () => {
+        window.location.href = `./index.html`;
     });
 
     // Next Game 버튼 동작

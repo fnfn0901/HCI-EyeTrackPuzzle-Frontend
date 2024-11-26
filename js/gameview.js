@@ -183,28 +183,37 @@ function initializeGrid(rows, cols) {
     const puzzleSlots = Array.from(document.querySelectorAll('.puzzle-slot'));
     const answerSlots = Array.from(document.querySelectorAll('.answer'));
 
-    const shuffledOrder = [...imagePieces].sort(() => Math.random() - 0.5);
-
-    // 퍼즐 슬롯에 섞인 조각 배치
-    puzzleSlots.forEach((slot, index) => {
-        if (shuffledOrder[index]) {
-            slot.style.backgroundImage = `url('${shuffledOrder[index]}')`;
-            slot.style.backgroundSize = 'cover';
-            slot.setAttribute('data-image', shuffledOrder[index]);
-        } else {
-            slot.style.backgroundImage = '';
-            slot.removeAttribute('data-image');
-        }
-    });
-
-    // 정답 슬롯 설정
+    // 정답 슬롯에 정답 이미지 배치
     answerSlots.forEach((slot, index) => {
         if (correctOrder[index]) {
+            slot.style.backgroundImage = `url('${correctOrder[index]}')`;
+            slot.style.backgroundSize = 'cover';
+            slot.setAttribute('data-image', correctOrder[index]);
             slot.setAttribute('data-correct', correctOrder[index]);
-            slot.style.backgroundImage = '';
-            slot.removeAttribute('data-image');
         }
     });
+
+    setTimeout(() => {
+
+        answerSlots.forEach(slot => {
+            slot.style.backgroundImage = '';
+            slot.removeAttribute('data-image');
+        });
+
+        const shuffledOrder = [...imagePieces].sort(() => Math.random() - 0.5);
+        puzzleSlots.forEach((slot, index) => {
+            if (shuffledOrder[index]) {
+                slot.style.backgroundImage = `url('${shuffledOrder[index]}')`;
+                slot.style.backgroundSize = 'cover';
+                slot.setAttribute('data-image', shuffledOrder[index]);
+            } else {
+                slot.style.backgroundImage = '';
+                slot.removeAttribute('data-image');
+            }
+        });
+
+        startStopwatch();
+    }, 1000);
 }
 
 function checkAnswers() {

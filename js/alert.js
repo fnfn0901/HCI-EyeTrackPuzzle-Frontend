@@ -36,7 +36,7 @@ function showAlert(type) {
 
         continueButton.onclick = () => {
             resetAlertState();
-            window.location.href = 'level.html'; // 메인 메뉴로 이동
+            window.location.href = 'index.html'; // 메인 메뉴로 이동
         };
         menuButton.onclick = () => {
             resetAlertState(); // Alert 닫기

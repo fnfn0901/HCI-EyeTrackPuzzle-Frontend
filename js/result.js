@@ -19,7 +19,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Finish 버튼 동작
     finishButton.addEventListener("click", () => {
-        window.location.href = `./index.html`;
+        // 모델 종료 요청
+        fetch("http://localhost:5001/stop_model", {
+            method: "GET",
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "Model stopped") {
+                window.location.href = `./index.html`;  // 모델 종료 후 메인 화면으로 이동
+            } else {
+                alert(data.status);  // 모델이 실행 중이지 않으면 상태 메시지 출력
+            }
+        })
+        .catch(error => {
+            console.error('Error stopping model:', error);
+            alert('모델 종료 중 오류가 발생했습니다.');
+        });
     });
 
     // Next Game 버튼 동작
